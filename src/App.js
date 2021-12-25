@@ -12,12 +12,6 @@ function App() {
             secondary: {
                 main: '#560032',
             },
-            background: {
-                default: '#fff',
-            },
-            text: {
-                primary: '#fff',
-            }
         },
     })
     /*let theme=createTheme({
