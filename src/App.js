@@ -5,6 +5,7 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import Dashboard from "./pages/dashboard/Dashboard";
 import NavBar from "./components/NavBar/NavBar";
 import {useState} from "react";
+import Register from "./pages/register/Register";
 
 function App() {
     const [login,setLogin]=useState(false)
@@ -21,7 +22,6 @@ function App() {
     /*let theme=createTheme({
 
     })*/
-    console.log(theme)
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
@@ -29,6 +29,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Dashboard />}/>
                     <Route path="/login" element={<Login setLogin={setLogin} />}/>
+                    <Route path="/register" element={<Register />}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

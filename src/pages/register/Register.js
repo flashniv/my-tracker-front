@@ -1,19 +1,14 @@
 import React, {useState} from "react";
 import {Box, Button, Stack, TextField} from "@mui/material";
-import {useNavigate} from "react-router-dom";
 
-export default function Login({setLogin}) {
+export default function Register(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate=useNavigate()
+    const onRegister=function () {
+        console.log("register")
+    }
 
-    const onLogin = function () {
-        console.log(`login: ${email} pass: ${password}`)
-        setLogin(true)
-        navigate("/",{replace:true})
-    };
-
-    return (
+    return(
         <Box sx={{
             backgroundColor: 'background.default',
             display: 'flex',
@@ -34,7 +29,7 @@ export default function Login({setLogin}) {
                 <TextField fullWidth required value={password} onChange={(e) => {
                     setPassword(e.target.value);
                 }} label="Password" type="password" variant="outlined"/>
-                <Button fullWidth onClick={onLogin} size="large" color="secondary" variant="contained">login</Button>
+                <Button fullWidth onClick={onRegister} size="large" color="secondary" variant="contained">register</Button>
             </Stack>
         </Box>
     );
