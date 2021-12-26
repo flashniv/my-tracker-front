@@ -6,9 +6,16 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import NavBar from "./components/NavBar/NavBar";
 import {useState} from "react";
 import Register from "./pages/register/Register";
+import APIServer from "./API/APIServer";
 
 function App() {
-    const [login,setLogin]=useState(false)
+    const [login,setLogin]=useState(APIServer.isLoggedIn)
+
+    const settingLogin=function (input){
+        setLogin(input)
+        APIServer.setLoggedIn(input)
+    }
+
     let theme=createTheme({
         palette: {
             primary: {
@@ -25,11 +32,11 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
-                <NavBar login={login} setLogin={setLogin}/>
+                <NavBar login={login} setLogin={settingLogin}/>
                 <Routes>
                     <Route path="/" element={<Dashboard />}/>
-                    <Route path="/login" element={<Login setLogin={setLogin} />}/>
-                    <Route path="/register" element={<Register />}/>
+                    <Route path="/login" element={<Login setLogin={settingLogin} />}/>
+                    <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

@@ -1,16 +1,25 @@
 import React, {useState} from "react";
 import {Box, Button, Stack, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import APIServer from "../../API/APIServer";
 
 export default function Login({setLogin}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate=useNavigate()
 
+    const onError = function (err) {
+        console.error(err)
+    }
+
     const onLogin = function () {
-        console.log(`login: ${email} pass: ${password}`)
-        setLogin(true)
-        navigate("/",{replace:true})
+        localStorage.setItem('userLogin',email)
+        localStorage.setItem('userPassword',password)
+        const response=APIServer.getContent("/api/account/")
+        response.then((value)=>{
+            setLogin(true)
+            navigate("/",{replace:true})
+        },onError)
     };
 
     return (

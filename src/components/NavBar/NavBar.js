@@ -2,12 +2,14 @@ import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import APIServer from "../../API/APIServer";
 
 export default function NavBar({login,setLogin}) {
     const navigate=useNavigate()
     const logout=function () {
         if(login){
             setLogin(false)
+            APIServer.setLoggedOut()
             navigate("/",{replace:true})
         }else{
             navigate("/login",{replace:true})
