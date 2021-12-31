@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar/NavBar";
 import {useState} from "react";
 import Register from "./pages/register/Register";
 import APIServer from "./API/APIServer";
+import Organizations from "./pages/configuration/organizations/Organizations";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/" element={<Dashboard />}/>
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
+                    <Route path="/configuration/organizations" element={<Organizations />}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

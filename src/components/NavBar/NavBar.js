@@ -1,44 +1,91 @@
-import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Button,
+    Collapse,
+    Drawer,
+    IconButton,
+    List,
+    ListItemButton, ListItemText,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import APIServer from "../../API/APIServer";
+import {ExpandLess, ExpandMore} from "@mui/icons-material";
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
-export default function NavBar({login,setLogin}) {
-    const navigate=useNavigate()
-    const logout=function () {
-        if(login){
+export default function NavBar({login, setLogin}) {
+    const [showSidebar, setShowSidebar] = useState(false)
+    const [showConfig, setShowConfig] = useState(false)
+    const navigate = useNavigate()
+    const logout = function () {
+        if (login) {
             setLogin(false)
             APIServer.setLoggedOut()
-            navigate("/",{replace:true})
-        }else{
-            navigate("/login",{replace:true})
+            navigate("/", {replace: true})
+        } else {
+            navigate("/login", {replace: true})
         }
     }
-    const register=function () {
-        navigate("/register",{replace:true})
-    }
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    sx={{mr: 2}}
+        <>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => setShowSidebar(true)}
+                        sx={{mr: 2}}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                        My task tracker
+                    </Typography>
+                    <Button onClick={logout} color="inherit">{login ? "Logout" : "Login"}</Button>
+                    {!login
+                        ? <Button onClick={()=>navigate("/register", {replace: true})} color="inherit">Register</Button>
+                        : <></>
+                    }
+                </Toolbar>
+            </AppBar>
+            {login
+                ? <Drawer
+                    anchor="left"
+                    open={showSidebar}
+                    onClose={() => setShowSidebar(false)}
                 >
-                    <MenuIcon/>
-                </IconButton>
-                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                    My task tracker
-                </Typography>
-                <Button onClick={logout} color="inherit">{login?"Logout":"Login"}</Button>
-                {!login
-                    ?<Button onClick={register} color="inherit">Register</Button>
-                    :<></>
-                }
-            </Toolbar>
-        </AppBar>
+                    <List
+                        sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
+                        component="nav"
+                    >
+                        <ListItemButton onClick={() => navigate("/", {replace: true})}>
+                            <HomeIcon/>
+                            <ListItemText primary="Home"/>
+                        </ListItemButton>
+                        <ListItemButton onClick={() => setShowConfig(!showConfig)}>
+                            <SettingsIcon/>
+                            <ListItemText primary="Configuration"/>
+                            {showConfig ? <ExpandLess/> : <ExpandMore/>}
+                        </ListItemButton>
+                        <Collapse in={showConfig} timeout="auto" unmountOnExit>
+                            <List>
+                                <ListItemButton onClick={()=>navigate("/configuration/organizations", {replace: true})}>
+                                    <CorporateFareIcon/>
+                                    <ListItemText primary="Organizations" />
+                                </ListItemButton>
+                            </List>
+                        </Collapse>
+                    </List>
+                </Drawer>
+                : <></>
+            }
+        </>
     );
 }
