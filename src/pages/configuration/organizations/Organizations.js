@@ -26,15 +26,28 @@ export default function Organizations() {
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [orgName,setOrgName] = useState("")
 
-    const addOrg = function () {
-        console.log(orgName)
-    }
-
-    useEffect(() => {
+    const updateOrgs = function () {
         const response = APIServer.getContent("/api/organization/")
         response.then((value) => {
             setOrgs(value.data)
         }, onError)
+    }
+
+    const addOrg = function () {
+        const org={
+            "id": null,
+            "organizationName": orgName,
+            "owner": null
+        }
+        const response = APIServer.postContent("/api/organization/",org)
+        response.then(()=>{
+            updateOrgs()
+            setOpenAddDialog(false)
+        },onError)
+    }
+
+    useEffect(() => {
+        updateOrgs()
     }, [])
 
     return (
@@ -55,7 +68,7 @@ export default function Organizations() {
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableBody>
                             {orgs.map((row) => (
-                                <OrganizationItem row={row} key={row.id}/>
+                                <OrganizationItem updateOrgs={updateOrgs} row={row} key={row.id}/>
                             ))}
                         </TableBody>
                     </Table>
