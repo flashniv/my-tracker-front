@@ -8,6 +8,7 @@ import {useState} from "react";
 import Register from "./pages/register/Register";
 import APIServer from "./API/APIServer";
 import Organizations from "./pages/configuration/organizations/Organizations";
+import Projects from "./pages/projects/Projects";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
@@ -38,6 +39,9 @@ function App() {
                     <Route path="/" element={<Dashboard />}/>
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
+                    <Route path="/projects">
+                        <Route path=":orgId" element={<Projects />} />
+                    </Route>
                     <Route path="/configuration/organizations" element={<Organizations />}/>
                 </Routes>
             </BrowserRouter>

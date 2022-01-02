@@ -2,9 +2,11 @@ import React from "react";
 import {Alert, Button, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import APIServer from "../../../API/APIServer";
+import {useNavigate} from "react-router-dom";
 
 export default function OrganizationItem({setAlert,updateOrgs,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    let navigate=useNavigate()
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -36,7 +38,7 @@ export default function OrganizationItem({setAlert,updateOrgs,row}) {
                     fontSize:'large'
                 }}
             >{row.organizationName}</TableCell>
-            <TableCell><Button variant="text">Projects</Button></TableCell>
+            <TableCell><Button variant="text" onClick={()=>navigate("/projects/"+row.id,{replace:true})}>Projects</Button></TableCell>
             <TableCell><Button variant="text">Reports</Button></TableCell>
             <TableCell><Button variant="text">Payments</Button></TableCell>
             <TableCell>
