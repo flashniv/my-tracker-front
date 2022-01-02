@@ -1,12 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button, Fab, Modal, Paper, Table, TableBody, TableContainer, TextField, Typography} from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Fab,
+    Modal,
+    Paper,
+    Table,
+    TableBody,
+    TableContainer,
+    TextField,
+    Typography
+} from "@mui/material";
 import APIServer from "../../../API/APIServer";
 import AddIcon from '@mui/icons-material/Add';
 import OrganizationItem from "../../../components/configuration/organizations/OrganizationItem";
-
-const onError = function (err) {
-    console.error(err)
-}
 
 const style = {
     position: 'absolute',
@@ -22,9 +30,14 @@ const style = {
 };
 
 export default function Organizations() {
+    const [alert,setAlert] = useState(<></>)
     const [orgs, setOrgs] = useState([])
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [orgName,setOrgName] = useState("")
+
+    const onError = function (err) {
+        setAlert(<Alert severity="error">Server return {err.response.status}</Alert>)
+    }
 
     const updateOrgs = function () {
         const response = APIServer.getContent("/api/organization/")
@@ -43,15 +56,18 @@ export default function Organizations() {
         response.then(()=>{
             updateOrgs()
             setOpenAddDialog(false)
+            setAlert(<Alert severity="success">Organization was added!</Alert>)
         },onError)
     }
 
     useEffect(() => {
         updateOrgs()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
         <>
+            {alert}
             <Fab
                 sx={{
                     position: 'fixed',
@@ -68,7 +84,7 @@ export default function Organizations() {
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableBody>
                             {orgs.map((row) => (
-                                <OrganizationItem updateOrgs={updateOrgs} row={row} key={row.id}/>
+                                <OrganizationItem setAlert={setAlert} updateOrgs={updateOrgs} row={row} key={row.id}/>
                             ))}
                         </TableBody>
                     </Table>

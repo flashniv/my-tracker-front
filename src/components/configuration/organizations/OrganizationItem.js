@@ -1,13 +1,9 @@
 import React from "react";
-import {Button, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
+import {Alert, Button, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import APIServer from "../../../API/APIServer";
 
-const onError = function (err) {
-    console.error(err)
-}
-
-export default function OrganizationItem({updateOrgs,row}) {
+export default function OrganizationItem({setAlert,updateOrgs,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -16,11 +12,16 @@ export default function OrganizationItem({updateOrgs,row}) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const onError = function (err) {
+        setAlert(<Alert severity="error">Server return {err.response.status}!</Alert>)
+    }
+
     const onDelete = () => {
         if(window.confirm("Delete it?")){
             const response = APIServer.postContent("/api/organization/delete/",row)
             response.then(()=>{
                 updateOrgs()
+                setAlert(<Alert severity="success">Organization was deleted!</Alert>)
             },onError)
         }
         handleClose()
