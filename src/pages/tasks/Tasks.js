@@ -63,7 +63,7 @@ export default function Tasks({setTitle}) {
                 : <></>
             }
             { tasks!==undefined && tasks.length === 0
-                ? <Box>You can add organization with "+" button</Box>
+                ? <Box>You can add task with "+" button</Box>
                 : <></>
             }
 

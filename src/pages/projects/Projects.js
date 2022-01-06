@@ -1,14 +1,42 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Backdrop, Box, CircularProgress, Fab, Paper, Table, TableBody, TableContainer} from "@mui/material";
+import {
+    Alert,
+    Backdrop,
+    Box, Button,
+    CircularProgress,
+    Fab,
+    Modal,
+    Paper,
+    Table,
+    TableBody,
+    TableContainer, TextField, Typography
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {useParams} from "react-router-dom";
 import APIServer from "../../API/APIServer";
 import ProjectsItem from "./ProjectsItem";
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    // height: 400,
+    backgroundColor: '#fff',
+    border: '2px solid #000',
+    boxShadow: 24,
+    padding: '20px',
+};
+
+
 export default function Projects({setTitle}) {
     const [alert,setAlert]=useState(<></>)
     const {orgId}=useParams()
     const [projects,setProjects]=useState()
+    const [openAddDialog, setOpenAddDialog] = useState(false)
+    const [projectName,setProjectName] = useState("")
+
 
     const onError = function (err) {
         setAlert(<Alert severity="error">Server return {err.response.status}</Alert>)
@@ -19,6 +47,24 @@ export default function Projects({setTitle}) {
         response.then((value) => {
             setProjects(value.data)
         }, onError)
+    }
+    const addProject = function () {
+        const org={
+            "id": orgId,
+            "organizationName": null,
+            "owner": null
+        }
+        const proj={
+            "id": null,
+            "organization": org,
+            "projectName": projectName
+        }
+        const response = APIServer.postContent("/api/project/",proj)
+        response.then(()=>{
+            updateProjects()
+            setOpenAddDialog(false)
+            setAlert(<Alert severity="success">Project was added!</Alert>)
+        },onError)
     }
 
     useEffect(() => {
@@ -37,7 +83,7 @@ export default function Projects({setTitle}) {
                     right: '30px'
                 }}
                 color="primary"
-                onClick={() => console.log("add")}
+                onClick={() => setOpenAddDialog(true)}
             >
                 <AddIcon/>
             </Fab>
@@ -66,6 +112,29 @@ export default function Projects({setTitle}) {
                 ? <Box>You can add project with "+" button</Box>
                 : <></>
             }
+            <Modal
+                open={openAddDialog}
+                onClose={() => setOpenAddDialog(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box style={style}>
+                    <Typography id="modal-modal-title" align="center" variant="h6" component="h2">
+                        Add project
+                    </Typography>
+                    <TextField fullWidth required value={projectName} onChange={(event)=>setProjectName(event.target.value)} label="Project name" variant="outlined"/>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row-reverse',
+                            p: 1
+                        }}
+                    >
+                        <Button onClick={addProject}>Add</Button>
+                    </Box>
+                </Box>
+            </Modal>
+
         </>
     );
 }
