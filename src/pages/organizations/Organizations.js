@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import APIServer from "../../API/APIServer";
 import AddIcon from '@mui/icons-material/Add';
-import OrganizationItem from "../../components/configuration/organizations/OrganizationItem";
+import OrganizationItem from "./OrganizationItem";
 
 const style = {
     position: 'absolute',

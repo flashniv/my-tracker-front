@@ -9,6 +9,7 @@ import Register from "./pages/register/Register";
 import APIServer from "./API/APIServer";
 import Organizations from "./pages/organizations/Organizations";
 import Projects from "./pages/projects/Projects";
+import Tasks from "./pages/tasks/Tasks";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
@@ -41,6 +42,9 @@ function App() {
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                     <Route path="/projects">
                         <Route path=":orgId" element={<Projects />} />
+                    </Route>
+                    <Route path="/tasks">
+                        <Route path=":projectId" element={<Tasks />} />
                     </Route>
                     <Route path="/organizations" element={<Organizations />}/>
                 </Routes>
