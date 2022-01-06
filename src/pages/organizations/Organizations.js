@@ -29,7 +29,7 @@ const style = {
     padding: '20px',
 };
 
-export default function Organizations() {
+export default function Organizations({setTitle}) {
     const [alert,setAlert] = useState(<></>)
     const [orgs, setOrgs] = useState(undefined)
     const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -61,6 +61,7 @@ export default function Organizations() {
     }
 
     useEffect(() => {
+        setTitle("Organizations")
         updateOrgs()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

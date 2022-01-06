@@ -13,6 +13,7 @@ import Tasks from "./pages/tasks/Tasks";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
+    const [title,setTitle]=useState("My task tracker")
 
     const settingLogin=function (input){
         setLogin(input)
@@ -35,18 +36,18 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
-                <NavBar login={login} setLogin={settingLogin}/>
+                <NavBar login={login} title={title} setLogin={settingLogin}/>
                 <Routes>
                     <Route path="/" element={<Dashboard />}/>
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                     <Route path="/projects">
-                        <Route path=":orgId" element={<Projects />} />
+                        <Route path=":orgId" element={<Projects setTitle={setTitle}/>} />
                     </Route>
                     <Route path="/tasks">
-                        <Route path=":projectId" element={<Tasks />} />
+                        <Route path=":projectId" element={<Tasks setTitle={setTitle} />} />
                     </Route>
-                    <Route path="/organizations" element={<Organizations />}/>
+                    <Route path="/organizations" element={<Organizations setTitle={setTitle} />}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

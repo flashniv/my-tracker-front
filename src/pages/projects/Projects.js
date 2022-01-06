@@ -5,7 +5,7 @@ import {useParams} from "react-router-dom";
 import APIServer from "../../API/APIServer";
 import ProjectsItem from "./ProjectsItem";
 
-export default function Projects() {
+export default function Projects({setTitle}) {
     const [alert,setAlert]=useState(<></>)
     const {orgId}=useParams()
     const [projects,setProjects]=useState()
@@ -22,6 +22,7 @@ export default function Projects() {
     }
 
     useEffect(() => {
+        setTitle("Projects")
         updateProjects()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

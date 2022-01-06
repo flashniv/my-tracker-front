@@ -19,7 +19,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
-export default function NavBar({login, setLogin}) {
+export default function NavBar({login,title, setLogin}) {
     const [showSidebar, setShowSidebar] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
     const navigate = useNavigate()
@@ -47,7 +47,7 @@ export default function NavBar({login, setLogin}) {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        My task tracker
+                        {title}
                     </Typography>
                     <Button onClick={logout} color="inherit">{login ? "Logout" : "Login"}</Button>
                     {!login
@@ -70,7 +70,7 @@ export default function NavBar({login, setLogin}) {
                             <HomeIcon/>
                             <ListItemText primary="Home"/>
                         </ListItemButton>
-                        <ListItemButton onClick={()=>navigate("/organizations", {replace: true})}>
+                        <ListItemButton onClick={()=>{navigate("/organizations", {replace: true}); setShowSidebar(false);}}>
                             <CorporateFareIcon/>
                             <ListItemText primary="Organizations" />
                         </ListItemButton>

@@ -3,10 +3,9 @@ import {useParams} from "react-router-dom";
 import {Alert, Backdrop, Box, CircularProgress, Fab, Paper, Table, TableBody, TableContainer} from "@mui/material";
 import APIServer from "../../API/APIServer";
 import AddIcon from "@mui/icons-material/Add";
-import ProjectsItem from "../projects/ProjectsItem";
 import TasksItem from "./TasksItem";
 
-export default function Tasks() {
+export default function Tasks({setTitle}) {
     const [alert,setAlert]=useState(<></>)
     const {projectId}=useParams()
     const [tasks,setTasks]=useState()
@@ -23,6 +22,7 @@ export default function Tasks() {
     }
 
     useEffect(() => {
+        setTitle("Tasks")
         updateTasks()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
