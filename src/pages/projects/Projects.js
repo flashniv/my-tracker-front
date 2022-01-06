@@ -54,7 +54,7 @@ export default function Projects() {
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableBody>
                             {projects.map((row) => (
-                                <ProjectsItem setAlert={setAlert} updatePprojects={updateProjects} row={row} key={row.id}/>
+                                <ProjectsItem setAlert={setAlert} updateProjects={updateProjects} row={row} key={row.id}/>
                             ))}
                         </TableBody>
                     </Table>
@@ -62,7 +62,7 @@ export default function Projects() {
                 : <></>
             }
             { projects!==undefined && projects.length === 0
-                ? <Box>You can add organization with "+" button</Box>
+                ? <Box>You can add project with "+" button</Box>
                 : <></>
             }
         </>

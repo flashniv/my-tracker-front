@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Alert, Backdrop, CircularProgress, Fab} from "@mui/material";
+import {Alert, Backdrop, Box, CircularProgress, Fab, Paper, Table, TableBody, TableContainer} from "@mui/material";
 import APIServer from "../../API/APIServer";
 import AddIcon from "@mui/icons-material/Add";
+import ProjectsItem from "../projects/ProjectsItem";
+import TasksItem from "./TasksItem";
 
 export default function Tasks() {
     const [alert,setAlert]=useState(<></>)
@@ -48,6 +50,23 @@ export default function Tasks() {
                 </Backdrop>
                 :<></>
             }
+            { tasks!==undefined && tasks.length !== 0
+                ? <TableContainer component={Paper}>
+                    <Table sx={{minWidth: 650}} aria-label="simple table">
+                        <TableBody>
+                            {tasks.map((row) => (
+                                <TasksItem setAlert={setAlert} updateTasks={updateTasks} row={row} key={row.id}/>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                : <></>
+            }
+            { tasks!==undefined && tasks.length === 0
+                ? <Box>You can add organization with "+" button</Box>
+                : <></>
+            }
+
         </>
     );
 }
