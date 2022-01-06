@@ -70,18 +70,16 @@ export default function NavBar({login, setLogin}) {
                             <HomeIcon/>
                             <ListItemText primary="Home"/>
                         </ListItemButton>
+                        <ListItemButton onClick={()=>navigate("/organizations", {replace: true})}>
+                            <CorporateFareIcon/>
+                            <ListItemText primary="Organizations" />
+                        </ListItemButton>
                         <ListItemButton onClick={() => setShowConfig(!showConfig)}>
                             <SettingsIcon/>
                             <ListItemText primary="Configuration"/>
                             {showConfig ? <ExpandLess/> : <ExpandMore/>}
                         </ListItemButton>
                         <Collapse in={showConfig} timeout="auto" unmountOnExit>
-                            <List>
-                                <ListItemButton onClick={()=>navigate("/configuration/organizations", {replace: true})}>
-                                    <CorporateFareIcon/>
-                                    <ListItemText primary="Organizations" />
-                                </ListItemButton>
-                            </List>
                         </Collapse>
                     </List>
                 </Drawer>

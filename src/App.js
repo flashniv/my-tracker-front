@@ -7,7 +7,7 @@ import NavBar from "./components/NavBar/NavBar";
 import {useState} from "react";
 import Register from "./pages/register/Register";
 import APIServer from "./API/APIServer";
-import Organizations from "./pages/configuration/organizations/Organizations";
+import Organizations from "./pages/organizations/Organizations";
 import Projects from "./pages/projects/Projects";
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
                     <Route path="/projects">
                         <Route path=":orgId" element={<Projects />} />
                     </Route>
-                    <Route path="/configuration/organizations" element={<Organizations />}/>
+                    <Route path="/organizations" element={<Organizations />}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

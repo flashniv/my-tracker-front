@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {
-    Alert,
+    Alert, Backdrop,
     Box,
-    Button,
+    Button, CircularProgress,
     Fab,
     Modal,
     Paper,
@@ -12,9 +12,9 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import APIServer from "../../../API/APIServer";
+import APIServer from "../../API/APIServer";
 import AddIcon from '@mui/icons-material/Add';
-import OrganizationItem from "../../../components/configuration/organizations/OrganizationItem";
+import OrganizationItem from "../../components/configuration/organizations/OrganizationItem";
 
 const style = {
     position: 'absolute',
@@ -31,7 +31,7 @@ const style = {
 
 export default function Organizations() {
     const [alert,setAlert] = useState(<></>)
-    const [orgs, setOrgs] = useState([])
+    const [orgs, setOrgs] = useState(undefined)
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [orgName,setOrgName] = useState("")
 
@@ -79,7 +79,16 @@ export default function Organizations() {
             >
                 <AddIcon/>
             </Fab>
-            {orgs.length !== 0
+            { orgs === undefined
+                ?<Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={true}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+                :<></>
+            }
+            { orgs!==undefined && orgs.length !== 0
                 ? <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableBody>
@@ -89,7 +98,11 @@ export default function Organizations() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                : <>You can add organization now</>
+                : <></>
+            }
+            { orgs!==undefined && orgs.length === 0
+                ? <Box>You can add organization with "+" button</Box>
+                : <></>
             }
             <Modal
                 open={openAddDialog}
