@@ -18,6 +18,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         setAlert(<Alert severity="error">Server return {err.response.status}!</Alert>)
     }
 
+    console.log(row);
 
     const onDelete = () => {
         if(window.confirm("Delete it?")){
@@ -34,6 +35,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
+            <TableCell>{row.status}</TableCell>
             <TableCell
                 onClick={()=>navigate("/task/"+row.id,{replace:true})}
                 sx={{
@@ -42,10 +44,11 @@ export default function TasksItem({setAlert,updateTasks,row}) {
                     cursor:'pointer'
                 }}
             >{row.title}</TableCell>
-            {/*<TableCell><Button variant="text" onClick={()=>navigate("/tasks/"+row.id,{replace:true})}>Projects</Button></TableCell>*/}
-            <TableCell><Button variant="text">Reports</Button></TableCell>
-            <TableCell><Button variant="text">Payments</Button></TableCell>
-            <TableCell>
+            <TableCell
+                sx={{
+                    textAlign:"right",
+                }}
+            >
                 <IconButton
                     color="primary"
                     aria-label="upload picture"
