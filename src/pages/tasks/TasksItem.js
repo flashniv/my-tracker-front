@@ -1,8 +1,9 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import {Alert, Button, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
+import {Alert, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
 import APIServer from "../../API/APIServer";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import TasksPlayer from "./TasksPlayer";
 
 export default function TasksItem({setAlert,updateTasks,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,6 +45,9 @@ export default function TasksItem({setAlert,updateTasks,row}) {
                     cursor:'pointer'
                 }}
             >{row.title}</TableCell>
+            <TableCell>
+                <TasksPlayer row={row}/>
+            </TableCell>
             <TableCell
                 sx={{
                     textAlign:"right",
