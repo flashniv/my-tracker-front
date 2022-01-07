@@ -6,7 +6,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import APIServer from "../../API/APIServer";
 
-export default function TasksPlayer({row}) {
+export default function TasksPlayer({setTaskStatus,row}) {
     const [minutes, setMinutes] = useState(row.minutes)
     const [seconds, setSeconds] = useState(0)
     const [play, setPlay] = useState(row.status.localeCompare("IN_PROGRESS") === 0)
@@ -19,7 +19,6 @@ export default function TasksPlayer({row}) {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 
@@ -47,10 +46,21 @@ export default function TasksPlayer({row}) {
             }
         }
     }
-    
+
     const syncMinutesToServer=function (newMinutes) {
         const response = APIServer.putContent("/api/task/"+row.id+"/updateMinutes?newMinutes="+newMinutes, {})
         response.then(()=>{
+            setSnackMessage("Task synced!")
+            setOpen(true)
+        },()=>{
+            setSnackMessage("ERROR!!! Task syncing")
+            setOpen(true)
+        })
+    }
+    const syncStateMinutesToServer=function (newStatus,newMinutes) {
+        const response = APIServer.putContent("/api/task/"+row.id+"/updateStatusMinutes?newStatus="+newStatus+"&newMinutes="+newMinutes, {})
+        response.then(()=>{
+            setTaskStatus(newStatus)
             setSnackMessage("Task synced!")
             setOpen(true)
         },()=>{
@@ -62,6 +72,7 @@ export default function TasksPlayer({row}) {
     const syncStateToServer=function (newState,sendMessage=true){
         const response = APIServer.putContent("/api/task/"+row.id+"/updateStatus?newStatus="+newState, {})
         response.then(()=>{
+            setTaskStatus(newState)
             if(sendMessage) {
                 setSnackMessage("Task status synced!")
                 setOpen(true)
@@ -94,11 +105,11 @@ export default function TasksPlayer({row}) {
                 ? <IconButton color="primary" aria-label="Play" component="span" onClick={()=>{setPlay(true); syncStateToServer("IN_PROGRESS"); }}>
                     <PlayArrowIcon/>
                 </IconButton>
-                : <IconButton color="primary" aria-label="Stop" component="span" onClick={()=>{setPlay(false); syncMinutesToServer(minutes); syncStateToServer("ON_PAUSE",false);}}>
+                : <IconButton color="primary" aria-label="Stop" component="span" onClick={()=>{setPlay(false); syncStateMinutesToServer("ON_PAUSE",minutes);}}>
                     <StopIcon/>
                 </IconButton>
             }
-            <Button color="primary" aria-label="Complete" component="span" endIcon={<DoneIcon/>}>
+            <Button color="primary" aria-label="Complete" component="span" endIcon={<DoneIcon/>} onClick={()=>syncStateToServer("DONE")} >
                 Complete
             </Button>
             <Snackbar

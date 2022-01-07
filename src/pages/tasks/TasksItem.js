@@ -1,12 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Alert, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
 import APIServer from "../../API/APIServer";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TasksPlayer from "./TasksPlayer";
+import CachedIcon from '@mui/icons-material/Cached';
+import PauseIcon from '@mui/icons-material/Pause';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import CheckIcon from '@mui/icons-material/Check';
 
 export default function TasksItem({setAlert,updateTasks,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [taskStatus,setTaskStatus] = useState(row.status)
     let navigate=useNavigate()
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -30,11 +35,26 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         handleClose()
     }
 
+    const getStatusIcon=function (status) {
+        switch (status) {
+            case "NEW":
+                return (<NewReleasesIcon/>)
+            case "ON_PAUSE":
+                return (<PauseIcon />)
+            case "IN_PROGRESS":
+                return (<CachedIcon />)
+            case "DONE":
+                return (<CheckIcon/>)
+            default:
+                return (<>status</>)
+        }
+    }
+
     return(
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-            <TableCell>{row.status}</TableCell>
+            <TableCell>{getStatusIcon(taskStatus)}</TableCell>
             <TableCell
                 onClick={()=>navigate("/task/"+row.id,{replace:true})}
                 sx={{
@@ -44,7 +64,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
                 }}
             >{row.title}</TableCell>
             <TableCell>
-                <TasksPlayer row={row}/>
+                <TasksPlayer row={row} setTaskStatus={setTaskStatus}/>
             </TableCell>
             <TableCell
                 sx={{

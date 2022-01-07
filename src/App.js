@@ -33,7 +33,7 @@ function App() {
     /*let theme=createTheme({
 
     })*/
-    console.log(theme)
+    //console.log(theme)
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
