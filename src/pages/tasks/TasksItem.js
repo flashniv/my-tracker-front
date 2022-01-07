@@ -19,8 +19,6 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         setAlert(<Alert severity="error">Server return {err.response.status}!</Alert>)
     }
 
-    console.log(row);
-
     const onDelete = () => {
         if(window.confirm("Delete it?")){
             const response = APIServer.postContent("/api/project/delete/",row)

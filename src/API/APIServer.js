@@ -41,6 +41,15 @@ export default class APIServer {
             }
         });
     }
+    static async putContent(path,data) {
+        console.log("put "+this.URL+path)
+        return await axios.put(this.URL + path, data, {
+            auth: {
+                username: this.getUser(),
+                password: this.getPassword()
+            }
+        });
+    }
     static async postUnauthContent(path,data) {
         console.log("post "+this.URL+path)
         return await axios.post(this.URL + path, data, {});
