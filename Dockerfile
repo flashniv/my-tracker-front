@@ -1,7 +1,7 @@
 FROM node
 
 ENV HOST=0.0.0.0
-ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=300"
+ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=200"
 
 COPY . /app
 WORKDIR /app
