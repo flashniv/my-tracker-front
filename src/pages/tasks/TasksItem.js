@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Alert, IconButton, Menu, MenuItem, TableCell, TableRow} from "@mui/material";
 import APIServer from "../../API/APIServer";
@@ -11,7 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 export default function TasksItem({setAlert,updateTasks,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [taskStatus,setTaskStatus] = useState(row.status)
+    const [taskStatus,setTaskStatus] = useState("")
     let navigate=useNavigate()
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -49,6 +49,12 @@ export default function TasksItem({setAlert,updateTasks,row}) {
                 return (<>status</>)
         }
     }
+
+    useEffect(()=>{
+        if (row.history && row.history.length>0){
+            setTaskStatus(row.history[0].status)
+        }
+    },[])
 
     return(
         <TableRow

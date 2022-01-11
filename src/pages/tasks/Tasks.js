@@ -38,7 +38,6 @@ export default function Tasks({setTitle}) {
 
     const [newTitle,setNewTitle]=useState("")
     const [newDesc,setNewDesc]=useState("")
-    const [newMin,setNewMin]=useState("0")
 
     const onError = function (err) {
         setAlert(<Alert severity="error">Server return {err.response.status}</Alert>)
@@ -58,19 +57,16 @@ export default function Tasks({setTitle}) {
             "projectName": null
         }
         const task={
-            "minutes": newMin,
             "project": proj,
             "id": null,
             "title": newTitle,
             "description": newDesc,
-            "status": "NEW"
         }
         const response = APIServer.postContent("/api/task/",task)
         response.then(()=>{
             updateTasks()
             setNewTitle("")
             setNewDesc("")
-            setNewMin("0")
             setOpenAddDialog(false)
             setAlert(<Alert severity="success">Task was added!</Alert>)
         },onError)
@@ -133,7 +129,6 @@ export default function Tasks({setTitle}) {
                     </Typography>
                     <TextField fullWidth required label="Title" value={newTitle} onChange={(e)=>setNewTitle(e.target.value)} variant="outlined"/>
                     <TextField fullWidth label="Description" multiline rows={4} value={newDesc} onChange={(e)=>setNewDesc(e.target.value)} />
-                    <TextField fullWidth required label="Time" value={newMin} onChange={(event => setNewMin(event.target.value))} variant="outlined"/>
                     <Box
                         sx={{
                             display: 'flex',
