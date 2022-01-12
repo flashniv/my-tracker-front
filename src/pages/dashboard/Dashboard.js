@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Backdrop, CircularProgress, Stack} from "@mui/material";
+import {Backdrop, CircularProgress, Fab, Stack} from "@mui/material";
 import DashboardColumn from "./DashboardColumn";
 import APIServer from "../../API/APIServer";
+import AddIcon from "@mui/icons-material/Add";
+import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
 
 export default function Dashboard() {
     const [load, setLoad] = useState(true)
@@ -9,6 +11,9 @@ export default function Dashboard() {
     const [readyTasks, setReadyTasks] = useState([]);
     const [inProgressTasks, setInProgressTasks] = useState([]);
     const [completeTasks, setCompleteTasks] = useState([]);
+
+    //Add dialog
+    const [openAddDialog, setOpenAddDialog] = useState(false)
 
     const onError = function (err) {
         //setAlert(<Alert severity="error">Server return {err.response.status}</Alert>)   //TODO release it
@@ -32,6 +37,17 @@ export default function Dashboard() {
 
     return (
         <>
+            <Fab
+                sx={{
+                    position: 'fixed',
+                    bottom: '30px',
+                    right: '30px'
+                }}
+                color="primary"
+                onClick={() => setOpenAddDialog(true)}
+            >
+                <AddIcon/>
+            </Fab>
             {load
                 ? <Backdrop
                     sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
@@ -56,6 +72,10 @@ export default function Dashboard() {
                     <DashboardColumn title="In progress" rows={inProgressTasks} updateTasks={updateTasks}/>
                     <DashboardColumn title="Complete" rows={completeTasks} updateTasks={updateTasks}/>
                 </Stack>
+            }
+            {openAddDialog
+                ?<AddTaskDialog updateTasks={updateTasks} openAddDialog={openAddDialog} setOpenAddDialog={setOpenAddDialog}/>
+                :<></>
             }
         </>
     );
