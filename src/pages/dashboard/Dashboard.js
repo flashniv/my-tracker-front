@@ -23,10 +23,10 @@ export default function Dashboard() {
         setLoad(true)
         const response = APIServer.getContent("/api/task/");
         response.then((value) => {
-            setNewTasks(value.data.filter((task) => task.history && task.history.length > 0 && task.history[0].status.localeCompare("NEW") === 0))
-            setInProgressTasks(value.data.filter((task) => task.history && task.history.length > 0 && task.history[0].status.localeCompare("IN_PROGRESS") === 0))
-            setCompleteTasks(value.data.filter((task) => task.history && task.history.length > 0 && task.history[0].status.localeCompare("DONE") === 0))
-            setReadyTasks(value.data.filter((task) => task.history && task.history.length > 0 && task.history[0].status.localeCompare("ON_PAUSE") === 0))
+            setNewTasks(value.data.filter((task) => task.status && task.status.localeCompare("NEW") === 0))
+            setInProgressTasks(value.data.filter((task) => task.status && task.status.localeCompare("IN_PROGRESS") === 0))
+            setCompleteTasks(value.data.filter((task) => task.status && task.status.localeCompare("DONE") === 0))
+            setReadyTasks(value.data.filter((task) => task.status && task.status.localeCompare("ON_PAUSE") === 0))
             setLoad(false)
         }, onError)
     }

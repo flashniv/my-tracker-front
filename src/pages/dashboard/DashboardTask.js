@@ -14,7 +14,7 @@ export default function DashboardTask({task, updateTasks}) {
                     p: 1,
                     backgroundColor: "white"
                 }}
-                onClick={()=>setOpenViewDialog(true)}
+                // onClick={()=>setOpenViewDialog(true)}
             >
                 <Box
                     sx={{

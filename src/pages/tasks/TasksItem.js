@@ -11,7 +11,6 @@ import CheckIcon from '@mui/icons-material/Check';
 
 export default function TasksItem({setAlert,updateTasks,row}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [taskStatus,setTaskStatus] = useState(row.status)
     let navigate=useNavigate()
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -54,7 +53,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-            <TableCell>{getStatusIcon(taskStatus)}</TableCell>
+            <TableCell>{getStatusIcon(row.status)}</TableCell>
             <TableCell
                 onClick={()=>navigate("/task/"+row.id,{replace:true})}
                 sx={{
@@ -64,7 +63,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
                 }}
             >{row.title}</TableCell>
             <TableCell>
-                <TasksPlayer row={row} setTaskStatus={setTaskStatus}/>
+                <TasksPlayer row={row} updateTasks={updateTasks}/>
             </TableCell>
             <TableCell
                 sx={{

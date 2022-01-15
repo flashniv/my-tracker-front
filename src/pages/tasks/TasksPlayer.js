@@ -6,9 +6,8 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import APIServer from "../../API/APIServer";
 
-export default function TasksPlayer({setTaskStatus, row}) {
-    const [seconds, setSeconds] = useState(row.seconds)
-    const [play, setPlay] = useState(row.status.localeCompare("IN_PROGRESS") === 0)
+export default function TasksPlayer({updateTasks, row}) {
+    const [seconds, setSeconds] = useState(0)
     const [snackMessage, setSnackMessage] = useState("")
 
     //snack
@@ -35,17 +34,46 @@ export default function TasksPlayer({setTaskStatus, row}) {
     );
 
     const timer = () => {
-        setSeconds(seconds + 1)
+        let addSeconds=0
+        if(row.isPlay!=null) {
+            const startDate = new Date(row.isPlay)
+            addSeconds=Math.floor((Date.now() - startDate) / 1000)
+        }
+        setSeconds(addSeconds+row.seconds)
     }
 
-    const syncStateToServer = function (newState, sendMessage = true) {
-        const response = APIServer.putContent("/api/task/" + row.id + "/updateStatus?newStatus=" + newState, {})
+    const start = () => {
+        const response = APIServer.putContent("/api/task/" + row.id + "/startPeriod", {})
         response.then(() => {
-            setTaskStatus(newState)
-            if (sendMessage) {
-                setSnackMessage("Task status synced!")
-                setOpen(true)
-            }
+            setSnackMessage("Task status synced!")
+            setOpen(true)
+            updateTasks()
+        }, () => {
+            setSnackMessage("ERROR!!! Task status syncing")
+            setOpen(true)
+        })
+    }
+    const pause = () => {
+        const response = APIServer.putContent("/api/task/" + row.id + "/stopPeriod", {})
+        response.then(() => {
+            setSnackMessage("Task status synced!")
+            setOpen(true)
+            updateTasks()
+        }, () => {
+            setSnackMessage("ERROR!!! Task status syncing")
+            setOpen(true)
+        })
+    }
+    const complete = () => {
+        let uri="/api/task/" + row.id + "/stopPeriod?newStatus=DONE"
+        if (row.isPlay==null){
+            uri="/api/task/" + row.id + "/updateStatus?newStatus=DONE"
+        }
+        const response = APIServer.putContent(uri, {})
+        response.then(() => {
+            setSnackMessage("Task status synced!")
+            setOpen(true)
+            updateTasks()
         }, () => {
             setSnackMessage("ERROR!!! Task status syncing")
             setOpen(true)
@@ -53,11 +81,10 @@ export default function TasksPlayer({setTaskStatus, row}) {
     }
 
     useEffect(() => {
-        if (play) {
-            const interval = setInterval(timer, 1000);
-            return () => clearInterval(interval);
-        }
-    }, [play, seconds]);
+        timer()
+        const interval = setInterval(timer, 1000);
+        return () => clearInterval(interval);
+    }, [row]);
 
     return (
         <Box
@@ -69,23 +96,21 @@ export default function TasksPlayer({setTaskStatus, row}) {
                 textAlign: "right"
             }}
         >
-            {Math.floor(seconds/60)}:{seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60}
-            {!play
+            {Math.floor(seconds / 60)}:{seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60}
+            {row.isPlay === undefined
                 ? <IconButton color="primary" aria-label="Play" component="span" onClick={() => {
-                    setPlay(true);
-                    syncStateToServer("IN_PROGRESS");
+                    start()
                 }}>
                     <PlayArrowIcon/>
                 </IconButton>
                 : <IconButton color="primary" aria-label="Stop" component="span" onClick={() => {
-                    setPlay(false);
-                    syncStateToServer("ON_PAUSE");
+                    pause()
                 }}>
                     <StopIcon/>
                 </IconButton>
             }
             <Button color="primary" aria-label="Complete" component="span" endIcon={<DoneIcon/>}
-                    onClick={() => syncStateToServer("DONE")}>
+                    onClick={() => complete()}>
                 Complete
             </Button>
             <Snackbar

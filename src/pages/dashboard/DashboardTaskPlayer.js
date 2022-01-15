@@ -6,28 +6,48 @@ import DoneIcon from '@mui/icons-material/Done';
 import APIServer from "../../API/APIServer";
 
 export default function DashboardTaskPlayer({row,updateTasks}) {
-    const [seconds, setSeconds] = useState(row.seconds)
-    const [play, setPlay] = useState(row.status.localeCompare("IN_PROGRESS") === 0)
+    const [seconds, setSeconds] = useState()
 
-    const timer = () => {
-        setSeconds(seconds + 1)
-    }
-
-    const syncStateToServer = function (newState, sendMessage = true) {
-        const response = APIServer.putContent("/api/task/" + row.id + "/updateStatus?newStatus=" + newState, {})
+    const start = () => {
+        const response = APIServer.putContent("/api/task/" + row.id + "/startPeriod", {})
         response.then(() => {
             updateTasks()
         }, () => {
-
+        })
+    }
+    const pause = () => {
+        const response = APIServer.putContent("/api/task/" + row.id + "/stopPeriod", {})
+        response.then(() => {
+            updateTasks()
+        }, () => {
+        })
+    }
+    const complete = () => {
+        let uri="/api/task/" + row.id + "/stopPeriod?newStatus=DONE"
+        if (row.isPlay==null){
+            uri="/api/task/" + row.id + "/updateStatus?newStatus=DONE"
+        }
+        const response = APIServer.putContent(uri, {})
+        response.then(() => {
+            updateTasks()
+        }, () => {
         })
     }
 
-    useEffect(() => {
-        if (play) {
-            const interval = setInterval(timer, 1000);
-            return () => clearInterval(interval);
+    const timer = () => {
+        let addSeconds=0
+        if(row.isPlay!=null) {
+            const startDate = new Date(row.isPlay)
+            addSeconds=Math.floor((Date.now() - startDate) / 1000)
         }
-    }, [play, seconds]);
+        setSeconds(addSeconds+row.seconds)
+    }
+
+    useEffect(() => {
+        timer()
+        const interval = setInterval(timer, 1000);
+        return () => clearInterval(interval);
+    }, [row]);
 
     return (
         <Box
@@ -36,22 +56,22 @@ export default function DashboardTaskPlayer({row,updateTasks}) {
             }}
         >
             {Math.floor(seconds/60)}:{seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60}
-            {!play
+            {row.isPlay === undefined
                 ? <IconButton size="small" color="primary" aria-label="Play" component="span" onClick={() => {
-                    setPlay(true);
-                    syncStateToServer("IN_PROGRESS");
+                    start()
                 }}>
                     <PlayArrowIcon fontSize="inherit" />
                 </IconButton>
                 : <IconButton size="small" color="primary" aria-label="Stop" component="span" onClick={() => {
-                    setPlay(false);
-                    syncStateToServer("ON_PAUSE");
+                    pause()
                 }}>
                     <StopIcon fontSize="inherit" />
                 </IconButton>
             }
             <IconButton size="small" color="primary" aria-label="Stop" component="span"
-                onClick={() => { setPlay(false); syncStateToServer("DONE");}}>
+                onClick={() => {
+                    complete()
+                }}>
                 <DoneIcon fontSize="inherit" />
             </IconButton>
         </Box>

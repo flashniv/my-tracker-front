@@ -67,11 +67,11 @@ export default function NavBar({login,title, setLogin}) {
                         sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                         component="nav"
                     >
-                        <ListItemButton onClick={() => navigate("/", {replace: true})}>
+                        <ListItemButton onClick={() => {navigate("/", {replace: true}); setShowSidebar(false);}}>
                             <HomeIcon/>
                             <ListItemText primary="Home"/>
                         </ListItemButton>
-                        <ListItemButton onClick={() => navigate("/Dashboard", {replace: true})}>
+                        <ListItemButton onClick={() =>{navigate("/Dashboard", {replace: true}); setShowSidebar(false);}}>
                             <DashboardIcon/>
                             <ListItemText primary="Dashboard"/>
                         </ListItemButton>
