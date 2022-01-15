@@ -18,6 +18,7 @@ import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function NavBar({login,title, setLogin}) {
     const [showSidebar, setShowSidebar] = useState(false)
@@ -69,6 +70,10 @@ export default function NavBar({login,title, setLogin}) {
                         <ListItemButton onClick={() => navigate("/", {replace: true})}>
                             <HomeIcon/>
                             <ListItemText primary="Home"/>
+                        </ListItemButton>
+                        <ListItemButton onClick={() => navigate("/Dashboard", {replace: true})}>
+                            <DashboardIcon/>
+                            <ListItemText primary="Dashboard"/>
                         </ListItemButton>
                         <ListItemButton onClick={()=>{navigate("/organizations", {replace: true}); setShowSidebar(false);}}>
                             <CorporateFareIcon/>

@@ -8,7 +8,7 @@ import APIServer from "../../API/APIServer";
 
 export default function TasksPlayer({setTaskStatus, row}) {
     const [seconds, setSeconds] = useState(row.seconds)
-    const [play, setPlay] = useState(false)
+    const [play, setPlay] = useState(row.status.localeCompare("IN_PROGRESS") === 0)
     const [snackMessage, setSnackMessage] = useState("")
 
     //snack
@@ -51,14 +51,6 @@ export default function TasksPlayer({setTaskStatus, row}) {
             setOpen(true)
         })
     }
-
-    useEffect(() => {
-        if (row.history && row.history.length > 0) {
-            if (row.history[0].status.localeCompare("IN_PROGRESS") === 0) {
-                setPlay(true)
-            }
-        }
-    }, [])
 
     useEffect(() => {
         if (play) {

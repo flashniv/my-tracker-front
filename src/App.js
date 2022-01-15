@@ -10,6 +10,7 @@ import APIServer from "./API/APIServer";
 import Organizations from "./pages/organizations/Organizations";
 import Projects from "./pages/projects/Projects";
 import Tasks from "./pages/tasks/Tasks";
+import IndexPage from "./pages/index/IndexPage";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
@@ -39,7 +40,8 @@ function App() {
             <BrowserRouter>
                 <NavBar login={login} title={title} setLogin={settingLogin}/>
                 <Routes>
-                    <Route path="/" element={<Dashboard />}/>
+                    <Route path="/" element={<IndexPage />}/>
+                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                     <Route path="/projects">

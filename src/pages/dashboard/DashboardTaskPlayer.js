@@ -7,7 +7,7 @@ import APIServer from "../../API/APIServer";
 
 export default function DashboardTaskPlayer({row,updateTasks}) {
     const [seconds, setSeconds] = useState(row.seconds)
-    const [play, setPlay] = useState(false)
+    const [play, setPlay] = useState(row.status.localeCompare("IN_PROGRESS") === 0)
 
     const timer = () => {
         setSeconds(seconds + 1)
@@ -21,14 +21,6 @@ export default function DashboardTaskPlayer({row,updateTasks}) {
 
         })
     }
-
-    useEffect(() => {
-        if (row.history && row.history.length > 0) {
-            if (row.history[0].status.localeCompare("IN_PROGRESS") === 0) {
-                setPlay(true)
-            }
-        }
-    }, [])
 
     useEffect(() => {
         if (play) {

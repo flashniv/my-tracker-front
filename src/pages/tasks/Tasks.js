@@ -46,6 +46,7 @@ export default function Tasks({setTitle}) {
     const updateTasks = function () {
         const response = APIServer.getContent("/api/project/"+projectId+"/tasks");
         response.then((value) => {
+            console.log(value.data)
             setTasks(value.data)
         }, onError)
     }
