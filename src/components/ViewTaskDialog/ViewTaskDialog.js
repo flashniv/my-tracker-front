@@ -1,49 +1,51 @@
-import React, {useState} from "react";
-import {
-    Box,
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Modal,
-    Select,
-    Stack,
-    TextField,
-    Typography
-} from "@mui/material";
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
+import React from "react";
+import {Box, Modal, Stack} from "@mui/material";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import PauseIcon from "@mui/icons-material/Pause";
+import CachedIcon from "@mui/icons-material/Cached";
+import CheckIcon from "@mui/icons-material/Check";
 
-function getTimeAgo(inputDate){
-    const startDate=new Date(inputDate)
-    const minutesAgo=(Date.now()-startDate)/60000
-    if(minutesAgo<3){
+const getStatusIcon = function (status) {
+    switch (status) {
+        case "NEW":
+            return (<NewReleasesIcon/>)
+        case "ON_PAUSE":
+            return (<PauseIcon/>)
+        case "IN_PROGRESS":
+            return (<CachedIcon/>)
+        case "DONE":
+            return (<CheckIcon/>)
+        default:
+            return (<>status</>)
+    }
+}
+
+function getTimeAgo(inputDate) {
+    const startDate = new Date(inputDate)
+    const minutesAgo = (Date.now() - startDate) / 60000
+    if (minutesAgo < 3) {
         return "just now"
-    }else if(minutesAgo<7){
+    } else if (minutesAgo < 7) {
         return "a few minutes"
-    }else if(minutesAgo<10){
+    } else if (minutesAgo < 10) {
         return "less 10 minutes"
-    }else if(minutesAgo<30){
+    } else if (minutesAgo < 30) {
         return "less 30 minutes"
-    }else if(minutesAgo<60){
+    } else if (minutesAgo < 60) {
         return "less an hour"
-    }else if(minutesAgo<120){
+    } else if (minutesAgo < 120) {
         return "less an 2 hours"
-    }else if(minutesAgo<360){
+    } else if (minutesAgo < 360) {
         return "less an 6 hours"
-    }else if(minutesAgo<720){
+    } else if (minutesAgo < 720) {
         return "less an 12 hours"
-    }else if(minutesAgo<1440){
+    } else if (minutesAgo < 1440) {
         return "today"
-    }else if(minutesAgo<2880){
+    } else if (minutesAgo < 2880) {
         return "yesterday"
-    }else if(minutesAgo<10080){
+    } else if (minutesAgo < 10080) {
         return "current week"
-    }else if(minutesAgo<43200){
+    } else if (minutesAgo < 43200) {
         return "current month"
     }
     return "too old"
@@ -61,19 +63,11 @@ const style = {
     boxShadow: 24,
     padding: '20px',
     maxHeight: '600px',
-    overflowY:"scroll"
+    overflowY: "scroll"
 };
 
-export default function ViewTaskDialog({task,updateTasks, openViewDialog, setOpenViewDialog}) {
-    const [newTitle, setNewTitle] = useState("")
-    const [newDesc, setNewDesc] = useState("")
-
-    const [currentOrg, setCurrentOrg] = useState("")
-    const [currentProj, setCurrentProj] = useState("")
-
-    console.log(task)
-
-    return(
+export default function ViewTaskDialog({task, updateTasks, openViewDialog, setOpenViewDialog}) {
+    return (
         <Modal
             open={openViewDialog}
             onClose={() => setOpenViewDialog(false)}
@@ -83,38 +77,42 @@ export default function ViewTaskDialog({task,updateTasks, openViewDialog, setOpe
             <Stack style={style} spacing={2}>
                 <Box
                     sx={{
-                        fontWeight:"bold"
+                        fontWeight: "bold"
                     }}
                 >
-                    {task.title}
+                    {getStatusIcon(task.status)}{"  " + task.title}
+                </Box>
+                <Box>
+                    {"Organization: " +task.project.organization.organizationName}
+                    {"   Project: " +task.project.projectName}
                 </Box>
                 <Box>
                     {task.description}
                 </Box>
-                <Timeline>
-                    {task.history.map((historyItem)=>
-                        <TimelineItem
-                            key={historyItem.id}
-                            sx={{
-                                    '&:before': {
-                                        content: `"${getTimeAgo(historyItem.timestamp)}"`,
-                                        flex: 1,
-                                        padding: '6px 16px',
-                                    },
-                            }}
-                        >
-                            <TimelineSeparator>
-                                <TimelineDot/>
-                                <TimelineConnector/>
-                            </TimelineSeparator>
-                            <TimelineContent
-                                sx={{
-                                    minWidth:"380px"
-                                }}
-                            >{"Set status "+historyItem.status}</TimelineContent>
-                        </TimelineItem>
-                    )}
-                </Timeline>
+                {/*<Timeline>*/}
+                {/*    {task.history.map((historyItem)=>*/}
+                {/*        <TimelineItem*/}
+                {/*            key={historyItem.id}*/}
+                {/*            sx={{*/}
+                {/*                    '&:before': {*/}
+                {/*                        content: `"${getTimeAgo(historyItem.timestamp)}"`,*/}
+                {/*                        flex: 1,*/}
+                {/*                        padding: '6px 16px',*/}
+                {/*                    },*/}
+                {/*            }}*/}
+                {/*        >*/}
+                {/*            <TimelineSeparator>*/}
+                {/*                <TimelineDot/>*/}
+                {/*                <TimelineConnector/>*/}
+                {/*            </TimelineSeparator>*/}
+                {/*            <TimelineContent*/}
+                {/*                sx={{*/}
+                {/*                    minWidth:"380px"*/}
+                {/*                }}*/}
+                {/*            >{"Set status "+historyItem.status}</TimelineContent>*/}
+                {/*        </TimelineItem>*/}
+                {/*    )}*/}
+                {/*</Timeline>*/}
             </Stack>
         </Modal>
 

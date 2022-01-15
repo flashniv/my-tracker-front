@@ -14,7 +14,6 @@ export default function DashboardTask({task, updateTasks}) {
                     p: 1,
                     backgroundColor: "white"
                 }}
-                // onClick={()=>setOpenViewDialog(true)}
             >
                 <Box
                     sx={{
@@ -28,6 +27,7 @@ export default function DashboardTask({task, updateTasks}) {
                         sx={{
                             verticalAlign: "center"
                         }}
+                        onClick={()=>setOpenViewDialog(true)}
                     >
                         {task.project.organization.organizationName}
                     </Box>
