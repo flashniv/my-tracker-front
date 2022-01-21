@@ -1,9 +1,8 @@
 import axios from "axios";
 
 export default class APIServer {
-    static URL='___SERVER___'
-    //static URL='https://api.my-task-tracker.flash.biz.ua'
-    static URL='http://localhost:8080'
+    static URL=process.env.API_URL
+    //static URL='http://localhost:8080'
 
     static getUser(){
         return localStorage.getItem('userLogin')
