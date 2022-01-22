@@ -8,21 +8,24 @@ import APIServer from "../../API/APIServer";
 export default function DashboardTaskPlayer({row,updateTasks}) {
     const [seconds, setSeconds] = useState()
 
-    const start = () => {
+    const start = (e) => {
+        e.stopPropagation()
         const response = APIServer.putContent("/api/task/" + row.id + "/startPeriod", {})
         response.then(() => {
             updateTasks()
         }, () => {
         })
     }
-    const pause = () => {
+    const pause = (e) => {
+        e.stopPropagation()
         const response = APIServer.putContent("/api/task/" + row.id + "/stopPeriod", {})
         response.then(() => {
             updateTasks()
         }, () => {
         })
     }
-    const complete = () => {
+    const complete = (e) => {
+        e.stopPropagation()
         let uri="/api/task/" + row.id + "/stopPeriod?newStatus=DONE"
         if (row.isPlay==null){
             uri="/api/task/" + row.id + "/updateStatus?newStatus=DONE"
@@ -52,26 +55,21 @@ export default function DashboardTaskPlayer({row,updateTasks}) {
     return (
         <Box
             sx={{
-                display:"inline-block"
+                display:"flex",
+                alignItems:"center"
             }}
         >
             {Math.floor(seconds/60)}:{seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60}
             {row.isPlay === undefined
-                ? <IconButton size="small" color="primary" aria-label="Play" component="span" onClick={() => {
-                    start()
-                }}>
+                ? <IconButton size="small" color="primary" aria-label="Play" component="span" onClick={start}>
                     <PlayArrowIcon fontSize="inherit" />
                 </IconButton>
-                : <IconButton size="small" color="primary" aria-label="Stop" component="span" onClick={() => {
-                    pause()
-                }}>
+                : <IconButton size="small" color="primary" aria-label="Stop" component="span" onClick={pause}>
                     <StopIcon fontSize="inherit" />
                 </IconButton>
             }
             <IconButton size="small" color="primary" aria-label="Stop" component="span"
-                onClick={() => {
-                    complete()
-                }}>
+                onClick={complete}>
                 <DoneIcon fontSize="inherit" />
             </IconButton>
         </Box>

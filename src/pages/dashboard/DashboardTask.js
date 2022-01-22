@@ -9,17 +9,21 @@ export default function DashboardTask({task, updateTasks}) {
         <>
             <Box
                 sx={{
+                    borderRadius: "10px",
+                    boxShadow:"0px 3px 7px grey",
                     textAlign: "left",
                     mb: 1,
                     p: 1,
                     backgroundColor: "white"
                 }}
+                onClick={()=>setOpenViewDialog(true)}
             >
                 <Box
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
                         textTransform: "uppercase",
+                        alignItems:"center",
                         mb: 1
                     }}
                 >
@@ -27,7 +31,6 @@ export default function DashboardTask({task, updateTasks}) {
                         sx={{
                             verticalAlign: "center"
                         }}
-                        onClick={()=>setOpenViewDialog(true)}
                     >
                         {task.project.organization.organizationName}
                     </Box>
