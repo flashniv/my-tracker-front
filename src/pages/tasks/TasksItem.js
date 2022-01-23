@@ -55,7 +55,7 @@ export default function TasksItem({setAlert,updateTasks,row}) {
         >
             <TableCell>{getStatusIcon(row.status)}</TableCell>
             <TableCell
-                onClick={()=>navigate("/task/"+row.id,{replace:true})}
+                onClick={()=>navigate("/task/"+row.id,{replace:false})}
                 sx={{
                     minWidth:'600px',
                     fontSize:'large',

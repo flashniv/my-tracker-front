@@ -33,14 +33,14 @@ export default function OrganizationItem({setAlert,updateOrgs,row}) {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
             <TableCell
-                onClick={()=>navigate("/projects/"+row.id,{replace:true})}
+                onClick={()=>navigate("/projects/"+row.id,{replace:false})}
                 sx={{
                     minWidth:'600px',
                     fontSize:'large',
                     cursor:'pointer'
                 }}
             >{row.organizationName}</TableCell>
-            {/*<TableCell><Button variant="text" onClick={()=>navigate("/projects/"+row.id,{replace:true})}>Projects</Button></TableCell>*/}
+            {/*<TableCell><Button variant="text" onClick={()=>navigate("/projects/"+row.id,{replace:false})}>Projects</Button></TableCell>*/}
             <TableCell><Button variant="text">Reports</Button></TableCell>
             <TableCell><Button variant="text">Payments</Button></TableCell>
             <TableCell>

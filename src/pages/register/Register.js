@@ -26,7 +26,7 @@ export default function Register({setLogin}){
             localStorage.setItem('userLogin',email)
             localStorage.setItem('userPassword',password)
             setLogin(true)
-            navigate("/",{replace:true})
+            navigate("/",{replace:false})
         },onError)
     }
 

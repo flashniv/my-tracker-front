@@ -18,7 +18,7 @@ export default function Login({setLogin}) {
         const response=APIServer.getContent("/api/account/")
         response.then((value)=>{
             setLogin(true)
-            navigate("/",{replace:true})
+            navigate("/",{replace:false})
         },onError)
     };
 

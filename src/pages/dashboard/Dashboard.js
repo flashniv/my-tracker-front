@@ -5,12 +5,14 @@ import APIServer from "../../API/APIServer";
 import AddIcon from "@mui/icons-material/Add";
 import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
 
-export default function Dashboard() {
+export default function Dashboard({setTitle}) {
     const [load, setLoad] = useState(true)
     const [newTasks, setNewTasks] = useState([]);
     const [readyTasks, setReadyTasks] = useState([]);
     const [inProgressTasks, setInProgressTasks] = useState([]);
     const [completeTasks, setCompleteTasks] = useState([]);
+
+    setTitle("Dashboard")
 
     //Add dialog
     const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -57,7 +59,7 @@ export default function Dashboard() {
                 </Backdrop>
                 :<Stack
                     sx={{
-                        minWidth: "600px",
+                        // minWidth: "600px",
                         minHeight: "1200px",
                         backgroundColor: "lightgray",
                         pl: 1,

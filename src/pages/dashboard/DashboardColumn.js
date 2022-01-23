@@ -7,7 +7,7 @@ export default function DashboardColumn({title,rows,updateTasks}) {
     return(
         <Box
             sx={{
-                minWidth:"250px",
+                width:"25%",
                 textAlign:"center"
             }}
         >

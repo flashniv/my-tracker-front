@@ -40,8 +40,8 @@ function App() {
             <BrowserRouter>
                 <NavBar login={login} title={title} setLogin={settingLogin}/>
                 <Routes>
-                    <Route path="/" element={<IndexPage />}/>
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/" element={<IndexPage setTitle={setTitle}/>}/>
+                    <Route path="/dashboard" element={<Dashboard setTitle={setTitle}/>} />
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                     <Route path="/projects">
