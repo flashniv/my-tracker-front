@@ -8,7 +8,8 @@ export default function DashboardColumn({title,rows,updateTasks}) {
         <Box
             sx={{
                 width:"25%",
-                textAlign:"center"
+                textAlign:"center",
+                zIndex:"1"
             }}
         >
             <h3>{title}</h3>

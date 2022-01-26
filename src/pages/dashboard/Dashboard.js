@@ -42,6 +42,7 @@ export default function Dashboard({setTitle}) {
             <Fab
                 sx={{
                     position: 'fixed',
+                    zIndex:'3',
                     bottom: '30px',
                     right: '30px'
                 }}
@@ -57,7 +58,7 @@ export default function Dashboard({setTitle}) {
                 >
                     <CircularProgress color="inherit"/>
                 </Backdrop>
-                :<Stack
+                : <Stack
                     sx={{
                         // minWidth: "600px",
                         minHeight: "1200px",
@@ -76,8 +77,9 @@ export default function Dashboard({setTitle}) {
                 </Stack>
             }
             {openAddDialog
-                ?<AddTaskDialog updateTasks={updateTasks} openAddDialog={openAddDialog} setOpenAddDialog={setOpenAddDialog}/>
-                :<></>
+                ? <AddTaskDialog updateTasks={updateTasks} openAddDialog={openAddDialog}
+                                 setOpenAddDialog={setOpenAddDialog}/>
+                : <></>
             }
         </>
     );
