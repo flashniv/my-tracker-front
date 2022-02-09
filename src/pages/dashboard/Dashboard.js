@@ -62,12 +62,9 @@ export default function Dashboard({setTitle}) {
                     sx={{
                         // minWidth: "600px",
                         minHeight: "1200px",
-                        backgroundColor: "lightgray",
-                        pl: 1,
-                        pr: 1
+                        backgroundColor: "white",
                     }}
                     direction="row"
-                    spacing={2}
                     // divider={<Divider orientation="vertical" flexItem />}
                 >
                     <DashboardColumn title="New" rows={newTasks} updateTasks={updateTasks}/>
