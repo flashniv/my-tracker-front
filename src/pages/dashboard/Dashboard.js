@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Backdrop, CircularProgress, Fab, Stack} from "@mui/material";
+import {Backdrop, Box, Button, CircularProgress, Stack, TextField} from "@mui/material";
 import DashboardColumn from "./DashboardColumn";
 import APIServer from "../../API/APIServer";
-import AddIcon from "@mui/icons-material/Add";
 import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
 
 export default function Dashboard({setTitle}) {
@@ -11,6 +10,7 @@ export default function Dashboard({setTitle}) {
     const [readyTasks, setReadyTasks] = useState([]);
     const [inProgressTasks, setInProgressTasks] = useState([]);
     const [completeTasks, setCompleteTasks] = useState([]);
+    const [filter,setFilter] = useState("")
 
     setTitle("Dashboard")
 
@@ -22,7 +22,7 @@ export default function Dashboard({setTitle}) {
     }
 
     const updateTasks = function () {
-        setLoad(true)
+        //setLoad(true)
         const response = APIServer.getContent("/api/task/");
         response.then((value) => {
             setNewTasks(value.data.filter((task) => task.status && task.status.localeCompare("NEW") === 0))
@@ -37,20 +37,15 @@ export default function Dashboard({setTitle}) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const filterFunc = function (task) {
+        if(filter.length!==0){
+            return task.project.organization.organizationName.toLowerCase().includes(filter.toLowerCase())
+        }
+        return true
+    }
+
     return (
         <>
-            <Fab
-                sx={{
-                    position: 'fixed',
-                    zIndex:'3',
-                    bottom: '30px',
-                    right: '30px'
-                }}
-                color="primary"
-                onClick={() => setOpenAddDialog(true)}
-            >
-                <AddIcon/>
-            </Fab>
             {load
                 ? <Backdrop
                     sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
@@ -58,20 +53,48 @@ export default function Dashboard({setTitle}) {
                 >
                     <CircularProgress color="inherit"/>
                 </Backdrop>
-                : <Stack
-                    sx={{
-                        // minWidth: "600px",
-                        minHeight: "1200px",
-                        backgroundColor: "white",
-                    }}
-                    direction="row"
-                    // divider={<Divider orientation="vertical" flexItem />}
-                >
-                    <DashboardColumn title="New" rows={newTasks} updateTasks={updateTasks}/>
-                    <DashboardColumn title="Ready to go" rows={readyTasks} updateTasks={updateTasks}/>
-                    <DashboardColumn title="In progress" rows={inProgressTasks} updateTasks={updateTasks}/>
-                    <DashboardColumn title="Complete" rows={completeTasks} updateTasks={updateTasks}/>
-                </Stack>
+                : <>
+                    <Box
+                        sx={{
+                            backgroundColor: "#c7ffc7",
+                            display: "flex",
+                            justifyContent: "right",
+                            mt: 1,
+                            ml: 1,
+                            mr: 1,
+                            pr: 1,
+                            pb: 1,
+                            pt: 1
+                        }}
+                    >
+                        <TextField
+                            variant={"standard"}
+                            sx={{width: "400px", mr: 2}}
+                            value={filter}
+                            onChange={event => setFilter(event.target.value)}
+                        />
+                        <Button
+                            variant={"contained"}
+                            onClick={() => setOpenAddDialog(true)}
+                        >
+                            ADD
+                        </Button>
+                    </Box>
+                    <Stack
+                        sx={{
+                            // minWidth: "600px",
+                            minHeight: "2000px",
+                            backgroundColor: "white",
+                        }}
+                        direction="row"
+                        // divider={<Divider orientation="vertical" flexItem />}
+                    >
+                        <DashboardColumn title="New" rows={newTasks.filter(filterFunc)} updateTasks={updateTasks}/>
+                        <DashboardColumn title="Ready to go" rows={readyTasks.filter(filterFunc)} updateTasks={updateTasks}/>
+                        <DashboardColumn title="In progress" rows={inProgressTasks.filter(filterFunc)} updateTasks={updateTasks}/>
+                        <DashboardColumn title="Complete" rows={completeTasks.filter(filterFunc)} updateTasks={updateTasks}/>
+                    </Stack>
+                </>
             }
             {openAddDialog
                 ? <AddTaskDialog updateTasks={updateTasks} openAddDialog={openAddDialog}
