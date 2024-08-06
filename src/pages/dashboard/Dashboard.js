@@ -10,7 +10,7 @@ export default function Dashboard({setTitle}) {
     const [readyTasks, setReadyTasks] = useState([]);
     const [inProgressTasks, setInProgressTasks] = useState([]);
     const [completeTasks, setCompleteTasks] = useState([]);
-    const [filter,setFilter] = useState("")
+    const [filter, setFilter] = useState("")
 
     setTitle("Dashboard")
 
@@ -38,8 +38,9 @@ export default function Dashboard({setTitle}) {
     }, [])
 
     const filterFunc = function (task) {
-        if(filter.length!==0){
-            return task.project.organization.organizationName.toLowerCase().includes(filter.toLowerCase())
+        if (filter.length !== 0) {
+            const title = task.project.organization.organizationName.toLowerCase() + ' - ' + task.project.projectName.toLowerCase()
+            return title.includes(filter.toLowerCase())
         }
         return true
     }
@@ -90,9 +91,12 @@ export default function Dashboard({setTitle}) {
                         // divider={<Divider orientation="vertical" flexItem />}
                     >
                         <DashboardColumn title="New" rows={newTasks.filter(filterFunc)} updateTasks={updateTasks}/>
-                        <DashboardColumn title="Ready to go" rows={readyTasks.filter(filterFunc)} updateTasks={updateTasks}/>
-                        <DashboardColumn title="In progress" rows={inProgressTasks.filter(filterFunc)} updateTasks={updateTasks}/>
-                        <DashboardColumn title="Complete" rows={completeTasks.filter(filterFunc)} updateTasks={updateTasks}/>
+                        <DashboardColumn title="Ready to go" rows={readyTasks.filter(filterFunc)}
+                                         updateTasks={updateTasks}/>
+                        <DashboardColumn title="In progress" rows={inProgressTasks.filter(filterFunc)}
+                                         updateTasks={updateTasks}/>
+                        <DashboardColumn title="Complete" rows={completeTasks.filter(filterFunc)}
+                                         updateTasks={updateTasks}/>
                     </Stack>
                 </>
             }
