@@ -108,6 +108,13 @@ export default function NavBar({login, title, setLogin}) {
                             <ListItemText primary="Dashboard"/>
                         </ListItemButton>
                         <ListItemButton onClick={() => {
+                            navigate("/Summary", {replace: false});
+                            setShowSidebar(false);
+                        }}>
+                            <DashboardIcon/>
+                            <ListItemText primary="Summary"/>
+                        </ListItemButton>
+                        <ListItemButton onClick={() => {
                             navigate("/organizations", {replace: false});
                             setShowSidebar(false);
                         }}>

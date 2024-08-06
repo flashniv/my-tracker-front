@@ -11,6 +11,7 @@ import Organizations from "./pages/organizations/Organizations";
 import Projects from "./pages/projects/Projects";
 import Tasks from "./pages/tasks/Tasks";
 import IndexPage from "./pages/index/IndexPage";
+import Summary from "./pages/summary/Summary";
 
 function App() {
     const [login,setLogin]=useState(APIServer.isLoggedIn)
@@ -42,6 +43,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<IndexPage setTitle={setTitle}/>}/>
                     <Route path="/dashboard" element={<Dashboard setTitle={setTitle}/>} />
+                    <Route path="/summary" element={<Summary setTitle={setTitle}/>} />
                     <Route path="/login" element={<Login setLogin={settingLogin} />}/>
                     <Route path="/register" element={<Register setLogin={settingLogin} />}/>
                     <Route path="/projects">
