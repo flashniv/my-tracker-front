@@ -14,6 +14,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../../shared-theme/ColorModeIconDropdown';
 import Sitemark from './SitemarkIcon';
 import { LoginContext } from '../../../common/LoginContext';
+import { useNavigate } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -34,6 +35,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
   const userLoggedIn = React.useContext(LoginContext);
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -83,7 +85,12 @@ export default function AppAppBar() {
             }}
           >
             {!userLoggedIn ? <>
-              <Button color="primary" variant="text" size="small">
+              <Button
+                color="primary"
+                variant="text"
+                size="small"
+                onClick={(e)=>{navigate("/login");}}
+              >
                 Sign in
               </Button>
               <Button color="primary" variant="contained" size="small">

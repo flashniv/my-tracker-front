@@ -5,9 +5,10 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
-import Site from './pages/site/Site';
 import { LoginContext } from './common/LoginContext';
 import API from './common/API';
+import LogIn from './pages/login/LogIn';
+import Site from './pages/site/Site';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(API.isLoggedIn());
@@ -30,6 +31,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Site />} />
+            <Route path="/login" element={<LogIn />} />
           </Routes>
         </BrowserRouter>
       </LoginContext>
