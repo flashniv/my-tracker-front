@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -6,18 +6,36 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import Site from './pages/site/Site';
+import { UserContext } from './common/UserContext';
 
-const theme = createTheme({
-  components: {
-    // Name of the component ⚛️
-    MuiButtonBase: {
-      defaultProps: {
-        // The props to apply
-        disableRipple: true, // No more ripple, on the whole application 💣!
+function App() {
+  const [userData, setUserData] = useState<UserAuth|null>(null);
+
+  const theme = createTheme({
+    components: {
+      // Name of the component ⚛️
+      MuiButtonBase: {
+        defaultProps: {
+          // The props to apply
+          disableRipple: true, // No more ripple, on the whole application 💣!
+        },
       },
     },
-  },
-});
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <UserContext value={userData}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Site />} />
+          </Routes>
+        </BrowserRouter>
+      </UserContext>
+    </ThemeProvider>
+  );
+}
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -25,13 +43,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Site />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <App/>
   </React.StrictMode>
 );
 
