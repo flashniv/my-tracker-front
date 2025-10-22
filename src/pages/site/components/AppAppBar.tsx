@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../../shared-theme/ColorModeIconDropdown';
 import Sitemark from './SitemarkIcon';
-import { UserContext } from '../../../common/UserContext';
+import { LoginContext } from '../../../common/LoginContext';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -33,7 +33,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
-  const userData = React.useContext(UserContext);
+  const userLoggedIn = React.useContext(LoginContext);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -82,7 +82,7 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            {userData == null ? <>
+            {!userLoggedIn ? <>
               <Button color="primary" variant="text" size="small">
                 Sign in
               </Button>

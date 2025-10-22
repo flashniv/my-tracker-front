@@ -6,10 +6,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import Site from './pages/site/Site';
-import { UserContext } from './common/UserContext';
+import { LoginContext } from './common/LoginContext';
+import API from './common/API';
 
 function App() {
-  const [userData, setUserData] = useState<UserAuth|null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean>(API.isLoggedIn());
 
   const theme = createTheme({
     components: {
@@ -25,13 +26,13 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <UserContext value={userData}>
+      <LoginContext value={loggedIn}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Site />} />
           </Routes>
         </BrowserRouter>
-      </UserContext>
+      </LoginContext>
     </ThemeProvider>
   );
 }
