@@ -9,6 +9,7 @@ import { LoginContext } from './common/LoginContext';
 import API from './common/API';
 import LogIn from './pages/login/LogIn';
 import Site from './pages/site/Site';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -42,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Site />} />
             <Route path="/login" element={<LogIn />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
       </LoginContext>
