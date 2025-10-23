@@ -1,32 +1,11 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import DashboardLayout from './components/DashboardLayout';
-import NotificationsProvider from './hooks/useNotifications/NotificationsProvider';
-import DialogsProvider from './hooks/useDialogs/DialogsProvider';
-import AppTheme from '../../shared-theme/AppTheme';
-import {
-  dataGridCustomizations,
-  datePickersCustomizations,
-  sidebarCustomizations,
-  formInputCustomizations,
-} from './theme/customizations';
+import AppToolBar from './component/AppToolBar';
 
-const themeComponents = {
-  ...dataGridCustomizations,
-  ...datePickersCustomizations,
-  ...sidebarCustomizations,
-  ...formInputCustomizations,
-};
+export default function Dashboard() {
 
-export default function Dashboard(props: { disableCustomTheme?: boolean }) {
-  return (
-    <AppTheme {...props} themeComponents={themeComponents}>
-      <CssBaseline enableColorScheme />
-      <NotificationsProvider>
-        <DialogsProvider>
-          <DashboardLayout />
-        </DialogsProvider>
-      </NotificationsProvider>
-    </AppTheme>
-  );
+    return (
+        <>
+        <AppToolBar/>
+        tyt
+        </>
+    );
 }
