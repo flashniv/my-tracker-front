@@ -62,14 +62,14 @@ export default function SignInCard() {
       pass: userPass
     }
     API.setUser(user);
-    API.getContent("/api/v1/login")
+    API.getContent("/login")
       .then(response => {
         setEmailError(false);
         setEmailErrorMessage('');
         setPasswordError(false);
         setPasswordErrorMessage('');
         userLoggedIn?.setLoggedIn(true);
-        navigate("/");
+        navigate("/dashboard");
       })
       .catch(error => {
         setEmailError(true);

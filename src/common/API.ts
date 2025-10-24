@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export default class API {
     //static URL = process.env.REACT_APP_API_URL
-    static URL = 'http://localhost:8080'
+    static URL = 'http://localhost:8080/api/v1'
 
     static getUser(): UserAuth | null {
         const user = localStorage.getItem('user');

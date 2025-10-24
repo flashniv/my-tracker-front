@@ -1,17 +1,21 @@
-import { createContext, useState } from 'react';
+import { useState } from 'react';
 import AppToolBar from './component/AppToolBar';
 import SideBar from './component/SideBar';
 import { Box } from '@mui/material';
+import Client from './sub-pages/clients/Clients';
+import Clients from './sub-pages/clients/Clients';
 
 export default function Dashboard() {
     const [openSideBar, setOpenSideBar] = useState(false);
+    const [title, setTitle] = useState("Dashboard");
+    const [activePage, setActivePage] = useState(1);
 
     return (
         <>
-            <AppToolBar title='News1' clickOpenSideBar={() => { setOpenSideBar(true) }} />
+            <AppToolBar title={title} clickOpenSideBar={() => { setOpenSideBar(true) }} />
             <SideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
             <Box>
-                tyt
+                {activePage==1?<Clients />:<></>}
             </Box>
         </>
     );

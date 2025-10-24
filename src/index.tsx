@@ -14,15 +14,15 @@ import Dashboard from './pages/dashboard/Dashboard';
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  useEffect(()=>{
-    API.getContent("/api/v1/login")
-    .then(response=>{
-      setLoggedIn(true);
-    })
-    .catch(error =>{
-      //console.error(error);
-    });
-  },[]);
+  useEffect(() => {
+    API.getContent("/login")
+      .then(response => {
+        setLoggedIn(true);
+      })
+      .catch(error => {
+        //console.error(error);
+      });
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -38,7 +38,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoginContext value={{loggedIn,setLoggedIn}}>
+      <LoginContext value={{ loggedIn, setLoggedIn }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Site />} />
