@@ -1,14 +1,15 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { JSX } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface SideBarItemProps{
-    text:string,
-    icon:JSX.Element,
-    onClick:()=>void
+interface SideBarItemProps {
+    text: string,
+    icon: JSX.Element,
+    onClick: () => void
 }
 
-function SideBarItem(props:SideBarItemProps) {
+function SideBarItem(props: SideBarItemProps) {
     return (
         <ListItem key={props.text} disablePadding>
             <ListItemButton onClick={props.onClick}>
@@ -27,10 +28,12 @@ interface SideBarProps {
 }
 
 export default function SideBar(props: SideBarProps) {
+    const navigate = useNavigate();
+
     return (
         <Drawer open={props.openSideBar} onClose={() => props.setOpenSideBar(false)}>
             <List>
-                <SideBarItem text="text" icon={<InboxIcon/>} onClick={()=>props.setOpenSideBar(false)}/>
+                <SideBarItem text="Client" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/client"); props.setOpenSideBar(false); }} />
             </List>
         </Drawer>
     );
