@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../../common/LoginContext";
 import API from "../../../../common/API";
 import { NotificationContext } from "../../../../common/NotificationContext";
+import ClientAddDialog from "./component/ClientAddDialog";
 
 interface ClientProps {
   client: Client,
@@ -21,29 +22,32 @@ function ClientItem(props: ClientProps) {
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
+  const [openAddDialog, setOpenAddDialog] = useState<boolean>(false);
   const notificationContext = useContext(NotificationContext);
 
-  useEffect(() => {
+  function updateClients() {
     API.getContent<Client[]>("/client")
       .then((persistClients) => {
         setClients(persistClients.data);
       })
-      .catch((error)=>{
+      .catch((error) => {
         notificationContext(error.message);
       });
-  }, []);
+  }
+
+  useEffect(updateClients, []);
 
   return (
     <Box sx={{ pt: 5 }}>
       <Container maxWidth="lg">
         <Stack spacing={2}>
-          <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }}><AddIcon fontSize="medium" /></Paper>
+          <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }} onClick={()=>setOpenAddDialog(true)} ><AddIcon fontSize="medium" /></Paper>
           {clients.map((client) =>
             <ClientItem key={client.id} client={client} onClick={() => { }} />
           )}
         </Stack>
       </Container>
+      <ClientAddDialog openDialog={openAddDialog} setOpenDialog={setOpenAddDialog} updateClients={updateClients} />
     </Box>
-
   )
 }

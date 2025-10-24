@@ -43,7 +43,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Site />} />
             <Route path="/login" element={<LogIn />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/client" element={<Dashboard />} />
+            <Route path="/dashboard/project/:id" element={<Dashboard />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
       </LoginContext>

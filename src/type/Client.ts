@@ -1,4 +1,4 @@
-interface Client{
-    id:number,
-    name:string
+interface Client {
+    id: number | null,
+    name: string
 }
