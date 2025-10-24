@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../../common/LoginContext";
 import API from "../../../../common/API";
+import { NotificationContext } from "../../../../common/NotificationContext";
 
 interface ClientProps {
   client: Client,
@@ -19,14 +20,17 @@ function ClientItem(props: ClientProps) {
 }
 
 export default function Clients() {
-  const [clients, setClients] = useState<Client[]>([{ id: 1, name: "name1" }]);
-  const loginContext = useContext(LoginContext);
+  const [clients, setClients] = useState<Client[]>([]);
+  const notificationContext = useContext(NotificationContext);
 
   useEffect(() => {
     API.getContent<Client[]>("/client")
       .then((persistClients) => {
         setClients(persistClients.data);
       })
+      .catch((error)=>{
+        notificationContext(error.message);
+      });
   }, []);
 
   return (
@@ -35,7 +39,7 @@ export default function Clients() {
         <Stack spacing={2}>
           <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }}><AddIcon fontSize="medium" /></Paper>
           {clients.map((client) =>
-            <ClientItem client={client} onClick={() => { }} />
+            <ClientItem key={client.id} client={client} onClick={() => { }} />
           )}
         </Stack>
       </Container>
