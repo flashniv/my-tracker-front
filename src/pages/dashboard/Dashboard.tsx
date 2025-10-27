@@ -6,6 +6,7 @@ import Clients from './sub-pages/clients/Clients';
 import { NotificationContext } from '../../common/NotificationContext';
 import { useLocation } from 'react-router-dom';
 import Projects from './sub-pages/projects/Projects';
+import Tasks from './sub-pages/tasks/Tasks';
 
 export default function Dashboard() {
     const [openSideBar, setOpenSideBar] = useState(false);
@@ -24,6 +25,7 @@ export default function Dashboard() {
             <Box>
                 {location.pathname == '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
+                {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
             </Box>
             {alert}
         </NotificationContext.Provider>

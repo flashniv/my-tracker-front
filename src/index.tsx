@@ -47,6 +47,9 @@ function App() {
             <Route path="/dashboard/project">
               <Route path=":id" element={<Dashboard />} />
             </Route>
+            <Route path="/dashboard/task">
+              <Route path=":id" element={<Dashboard />} />
+            </Route>
             <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>

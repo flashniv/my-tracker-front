@@ -19,11 +19,11 @@ function ClientItem(props: ClientProps) {
     );
 }
 
-interface ClientsProps{
-    setTitle:(title:string)=>void
+interface ClientsProps {
+    setTitle: (title: string) => void
 }
 
-export default function Clients(props:ClientsProps) {
+export default function Clients(props: ClientsProps) {
     const [clients, setClients] = useState<Client[]>([]);
     const [openAddDialog, setOpenAddDialog] = useState<boolean>(false);
     const notificationContext = useContext(NotificationContext);
@@ -41,10 +41,6 @@ export default function Clients(props:ClientsProps) {
             });
     }
 
-    function clickToItem(clientId: number) {
-        navigate("/dashboard/project/" + clientId);
-    }
-
     useEffect(updateClients, []);
 
     return (
@@ -53,7 +49,7 @@ export default function Clients(props:ClientsProps) {
                 <Stack spacing={2}>
                     <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }} onClick={() => setOpenAddDialog(true)} ><AddIcon fontSize="medium" /></Paper>
                     {clients.map((client) =>
-                        <ClientItem key={client.id} client={client} onClick={() => clickToItem(client.id!=null?client.id:-1)} />
+                        <ClientItem key={client.id} client={client} onClick={() => navigate("/dashboard/project/" + (client.id != null ? client.id : -1))} />
                     )}
                 </Stack>
             </Container>
