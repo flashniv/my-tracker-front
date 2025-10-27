@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { NotificationContext } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
+import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
@@ -19,11 +19,16 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
     const notificationContext = useContext(NotificationContext);
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [time, setTime] = useState<string>("30");
     const [taskType, setTaskType] = useState<string>(TaskType.NOT_CLASSIFIED);
     const [taskQuadrant, setTaskQuadrant] = useState<string>(TaskQuadrant.NOT_CLASSIFIED);
 
     function saveTask(e: React.FormEvent) {
         e.preventDefault();
+        let timeStr="";
+        if(time.length>0){
+            timeStr="?time="+time;
+        }
 
         const newTask: Task = {
             id: null,
@@ -34,7 +39,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             taskStatus: TaskStatus.NEW,
             project: null
         }
-        API.postContent<Task, string>("/project/" + props.projectId + "/createTask", newTask)
+        API.postContent<Task, string>("/project/" + props.projectId + "/createTask"+timeStr, newTask)
             .then(() => {
                 props.updateTasks();
                 setName("");
@@ -46,6 +51,13 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             .catch((error) => {
                 notificationContext(error.message);
             });
+    }
+
+    function changeTime(e: React.ChangeEvent) {
+
+        if (("" + e.target.value).match("^[0-9]*$")) {
+            setTime(e.target.value);
+        }
     }
 
     return (
@@ -63,6 +75,18 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                     <Stack spacing={2}>
                         <TextField id="outlined-basic" autoComplete="off" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
                         <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
+                            <ButtonGroup variant="outlined" aria-label="Basic button group">
+                                <Button onClick={()=>setTime("20")}>20</Button>
+                                <Button onClick={()=>setTime("30")}>30</Button>
+                                <Button onClick={()=>setTime("40")}>40</Button>
+                                <Button onClick={()=>setTime("60")}>60</Button>
+                                <Button onClick={()=>setTime("90")}>90</Button>
+                                <Button onClick={()=>setTime("120")}>120</Button>
+                                <Button onClick={()=>setTime("180")}>180</Button>
+                            </ButtonGroup>
+                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl:1 }} value={time} onChange={changeTime} />
+                        </Box>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
                             <RadioGroup
