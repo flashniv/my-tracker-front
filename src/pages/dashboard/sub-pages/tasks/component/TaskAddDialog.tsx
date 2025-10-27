@@ -4,6 +4,8 @@ import API from "../../../../../common/API";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
+import { Task } from "../../../../../type/Task";
+import { TaskStatus } from "../../../../../type/TaskStatus";
 //import {TaskType,TaskStatus,TaskQuadrant} from "../../../../../type/Task";
 
 interface TaskAddDialogProps {
@@ -22,21 +24,28 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
 
     function saveTask(e: React.FormEvent) {
         e.preventDefault();
-        // const newTask: Task = {
-        //     id: null,
-        //     name: name,
-        //     description: 
-        //     project: null
-        // }
-        // API.postContent<Client, string>("/client/" + props.clientId + "/createTask", newTask)
-        //     .then(() => {
-        //         props.updateTasks();
-        //         setName("");
-        //         props.setOpenDialog(false);
-        //     })
-        //     .catch((error) => {
-        //         notificationContext(error.message);
-        //     });
+
+        const newTask: Task = {
+            id: null,
+            name: name,
+            description: description,
+            taskType: TaskType[taskType as keyof typeof TaskType],
+            taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
+            taskStatus: TaskStatus.NEW,
+            project: null
+        }
+        API.postContent<Task, string>("/project/" + props.projectId + "/createTask", newTask)
+            .then(() => {
+                props.updateTasks();
+                setName("");
+                setDescription("");
+                setTaskType(TaskType.NOT_CLASSIFIED);
+                setTaskQuadrant(TaskQuadrant.NOT_CLASSIFIED);
+                props.setOpenDialog(false);
+            })
+            .catch((error) => {
+                notificationContext(error.message);
+            });
     }
 
     return (
@@ -52,7 +61,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
-                        <TextField id="outlined-basic" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
+                        <TextField id="outlined-basic" autoComplete="off" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
                         <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
