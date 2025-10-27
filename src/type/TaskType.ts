@@ -1,0 +1,8 @@
+export enum TaskType {
+    MICRO="MICRO",
+    SMALL="SMALL",
+    MEDIUM="MEDIUM",
+    LONG="LONG",
+    EXTRA_LONG="EXTRA_LONG",
+    NOT_CLASSIFIED="NOT_CLASSIFIED"
+}

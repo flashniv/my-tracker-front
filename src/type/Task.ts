@@ -1,29 +1,6 @@
-enum TaskStatus {
-    NEW,
-    VIEWED,
-    IN_PROGRESS,
-    DONE,
-    ARCHIVED,
-    HOLD,
-    BLOCKED
-}
-
-enum TaskType {
-    MICRO,
-    SMALL,
-    MEDIUM,
-    LONG,
-    EXTRA_LONG,
-    NOT_CLASSIFIED
-}
-
-enum TaskQuadrant {
-    URGENT_IMPORTANT,
-    NO_URGENT_IMPORTANT,
-    URGENT_NO_IMPORTANT,
-    NO_URGENT_NO_IMPORTANT,
-    NOT_CLASSIFIED
-}
+import { TaskQuadrant } from "./TaskQuadrant";
+import { TaskStatus } from "./TaskStatus";
+import { TaskType } from "./TaskType";
 
 interface Task {
     id: number | null,

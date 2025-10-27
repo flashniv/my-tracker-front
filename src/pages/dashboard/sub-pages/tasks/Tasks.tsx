@@ -5,6 +5,7 @@ import { NotificationContext } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 //import ProjectAddDialog from "./component/ProjectAddDialog";
 import API from "../../../../common/API";
+import TaskAddDialog from "./component/TaskAddDialog";
 
 interface TaskItemProps {
     task: Task,
@@ -59,7 +60,7 @@ export default function Tasks(props: TasksProps) {
                     )}
                 </Stack>
             </Container>
-            {/* <ProjectAddDialog openDialog={openAddDialog} setOpenDialog={setOpenAddDialog} updateTasks={updateTasks} clientId={id} /> */}
+            <TaskAddDialog openDialog={openAddDialog} setOpenDialog={setOpenAddDialog} updateTasks={updateTasks} projectId={id} />
         </Box>
     );
 }
