@@ -1,6 +1,6 @@
 import { Box, Container, Paper, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NotificationContext } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import ProjectAddDialog from "./component/ProjectAddDialog";
@@ -13,7 +13,7 @@ interface ProjectItemProps {
 
 function ProjectItem(props: ProjectItemProps) {
     return (
-        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }}>
+        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={props.onClick}>
             {props.project.name}
         </Paper>
     )
@@ -28,6 +28,7 @@ export default function Projects(props:ProjectsProps) {
     const [projects, setProjects] = useState<Project[]>([]);
     const [openAddDialog, setOpenAddDialog] = useState<boolean>(false);
     const notificationContext = useContext(NotificationContext);
+    const navigate = useNavigate();
     let id = -1;
 
     props.setTitle("Projects");
@@ -54,7 +55,7 @@ export default function Projects(props:ProjectsProps) {
                 <Stack spacing={2}>
                     <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }} onClick={() => setOpenAddDialog(true)} ><AddIcon fontSize="medium" /></Paper>
                     {projects.map((project) =>
-                        <ProjectItem key={project.id} project={project} onClick={() => { }} />
+                        <ProjectItem key={project.id} project={project} onClick={() => navigate("/dashboard/task/" + (project.id != null ? project.id : -1))} />
                     )}
                 </Stack>
             </Container>

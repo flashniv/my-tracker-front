@@ -13,7 +13,7 @@ interface TaskItemProps {
 
 function TaskItem(props: TaskItemProps) {
     return (
-        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }}>
+        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={props.onClick} >
             {props.task.name}
         </Paper>
     )
@@ -55,7 +55,7 @@ export default function Tasks(props: TasksProps) {
                 <Stack spacing={2}>
                     <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }} onClick={() => setOpenAddDialog(true)} ><AddIcon fontSize="medium" /></Paper>
                     {Tasks.map((task) =>
-                        <TaskItem key={task.id} task={task} onClick={() => navigate("/dashboard/task/" + id)} />
+                        <TaskItem key={task.id} task={task} onClick={() => {}} />
                     )}
                 </Stack>
             </Container>
