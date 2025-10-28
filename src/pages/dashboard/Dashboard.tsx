@@ -1,12 +1,29 @@
 import { useState } from 'react';
 import AppToolBar from './component/AppToolBar';
 import SideBar from './component/SideBar';
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Button, Container, Stack } from '@mui/material';
 import Clients from './sub-pages/clients/Clients';
 import { NotificationContext } from '../../common/NotificationContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Projects from './sub-pages/projects/Projects';
 import Tasks from './sub-pages/tasks/Tasks';
+
+interface DashboardPageProps {
+    setTitle: (title: string) => void
+}
+
+function DashboardPage(props: DashboardPageProps) {
+    const navigate=useNavigate();
+
+    return (
+        <Container maxWidth="sm" sx={{pt:4}}>
+            <Stack spacing={2}>
+                <Button variant="text" onClick={()=>{navigate("/dashboard/client")}}>Clients</Button>
+                <Button variant="text">Kanban Dashboard</Button>
+            </Stack>
+        </Container>
+    );
+}
 
 export default function Dashboard() {
     const [openSideBar, setOpenSideBar] = useState(false);
@@ -23,7 +40,8 @@ export default function Dashboard() {
             <AppToolBar title={title} clickOpenSideBar={() => { setOpenSideBar(true) }} />
             <SideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
             <Box>
-                {location.pathname == '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
+                {location.pathname === '/dashboard' ? <DashboardPage setTitle={setTitle} /> : <></>}
+                {location.pathname === '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
             </Box>
