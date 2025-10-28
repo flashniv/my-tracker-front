@@ -7,6 +7,7 @@ import { NotificationContext } from '../../common/NotificationContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Projects from './sub-pages/projects/Projects';
 import Tasks from './sub-pages/tasks/Tasks';
+import AccountingPeriods from './sub-pages/accounting-period/AccountingPeriods';
 
 interface DashboardPageProps {
     setTitle: (title: string) => void
@@ -42,6 +43,7 @@ export default function Dashboard() {
             <Box>
                 {location.pathname === '/dashboard' ? <DashboardPage setTitle={setTitle} /> : <></>}
                 {location.pathname === '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
+                {location.pathname.startsWith('/dashboard/accounting-period') ? <AccountingPeriods setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
             </Box>

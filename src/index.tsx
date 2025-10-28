@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -45,6 +45,9 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path="/dashboard/client" element={<Dashboard />} />
             <Route path="/dashboard/project">
+              <Route path=":id" element={<Dashboard />} />
+            </Route>
+            <Route path="/dashboard/accounting-period">
               <Route path=":id" element={<Dashboard />} />
             </Route>
             <Route path="/dashboard/task">
