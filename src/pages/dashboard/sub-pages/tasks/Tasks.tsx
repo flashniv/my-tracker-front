@@ -1,23 +1,28 @@
 import { Box, CircularProgress, Container, Paper, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NotificationContext } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
-//import ProjectAddDialog from "./component/ProjectAddDialog";
 import API from "../../../../common/API";
 import TaskAddDialog from "./component/TaskAddDialog";
+import TaskEditDialog from "./component/TaskEditDialog";
+import { Task } from "../../../../type/Task";
 
 interface TaskItemProps {
     task: Task,
-    onClick: () => void
+    updateTasks: () => void
 }
 
 function TaskItem(props: TaskItemProps) {
-    return (
-        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={props.onClick} >
+    const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
+
+    return (<>
+        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={()=>{setOpenEditDialog(true);}} >
             {props.task.name}
         </Paper>
-    )
+        <TaskEditDialog openDialog={openEditDialog} setOpenDialog={setOpenEditDialog} task={props.task} updateTasks={props.updateTasks} />
+    </>
+    );
 }
 
 interface TasksProps {
@@ -30,7 +35,6 @@ export default function Tasks(props: TasksProps) {
     const [openAddDialog, setOpenAddDialog] = useState<boolean>(false);
     const notificationContext = useContext(NotificationContext);
     const [placeHolder, setPlaceHolder] = useState<boolean>(true);
-    const navigate = useNavigate();
     let id = -1;
 
     props.setTitle("Tasks");
@@ -64,7 +68,7 @@ export default function Tasks(props: TasksProps) {
                         : <>
                             <Paper elevation={3} sx={{ p: 2, textAlign: "center", bgcolor: "lightblue", cursor: "pointer" }} onClick={() => setOpenAddDialog(true)} ><AddIcon fontSize="medium" /></Paper>
                             {Tasks.map((task) =>
-                                <TaskItem key={task.id} task={task} onClick={() => { }} />
+                                <TaskItem key={task.id} task={task} updateTasks={updateTasks} />
                             )}
                         </>}
                 </Stack>

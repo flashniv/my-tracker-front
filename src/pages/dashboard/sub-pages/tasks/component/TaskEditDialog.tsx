@@ -6,36 +6,32 @@ import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
 import { TaskStatus } from "../../../../../type/TaskStatus";
+//import {TaskType,TaskStatus,TaskQuadrant} from "../../../../../type/Task";
 
-interface TaskAddDialogProps {
+interface TaskEditDialogProps {
     openDialog: boolean,
     setOpenDialog: (open: boolean) => void,
     updateTasks: () => void,
-    projectId: number
+    task:Task
 }
 
-export default function TaskAddDialog(props: TaskAddDialogProps) {
+export default function TaskEditDialog(props: TaskEditDialogProps) {
     const notificationContext = useContext(NotificationContext);
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [time, setTime] = useState<string>("30");
-    const [taskType, setTaskType] = useState<string>(TaskType.NOT_CLASSIFIED);
-    const [taskQuadrant, setTaskQuadrant] = useState<string>(TaskQuadrant.NOT_CLASSIFIED);
+    const [name, setName] = useState<string>(props.task.name);
+    const [description, setDescription] = useState<string>(props.task.description);
+    const [time, setTime] = useState<string>("");
+    const [taskType, setTaskType] = useState<string>(props.task.taskType);
+    const [taskQuadrant, setTaskQuadrant] = useState<string>(props.task.taskQuadrant);
 
     function closeWindow() {
-        setName("");
-        setDescription("");
-        setTime("30");
-        setTaskType(TaskType.NOT_CLASSIFIED);
-        setTaskQuadrant(TaskQuadrant.NOT_CLASSIFIED);
         props.setOpenDialog(false);
     }
 
     function saveTask(e: React.FormEvent) {
-        e.preventDefault();
-        let timeStr="";
-        if(time.length>0){
-            timeStr="?time="+time;
+        /*e.preventDefault();
+        let timeStr = "";
+        if (time.length > 0) {
+            timeStr = "?time=" + time;
         }
 
         const newTask: Task = {
@@ -47,7 +43,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             taskStatus: TaskStatus.NEW,
             project: null
         }
-        API.postContent<Task, string>("/project/" + props.projectId + "/createTask"+timeStr, newTask)
+        API.postContent<Task, string>("/project/" + props.projectId + "/createTask" + timeStr, newTask)
             .then(() => {
                 props.updateTasks();
                 closeWindow();
@@ -56,7 +52,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                 notificationContext(error.message);
                 props.updateTasks();
                 closeWindow();
-            });
+            });*/
     }
 
     function changeTime(e: React.ChangeEvent) {
@@ -74,7 +70,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
         >
             <form onSubmit={saveTask}>
                 <DialogTitle id="alert-dialog-title">
-                    Add task
+                    Edit task
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
@@ -82,15 +78,15 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                         <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
                             <ButtonGroup variant="outlined" aria-label="Basic button group">
-                                <Button onClick={()=>setTime("20")}>20</Button>
-                                <Button onClick={()=>setTime("30")}>30</Button>
-                                <Button onClick={()=>setTime("40")}>40</Button>
-                                <Button onClick={()=>setTime("60")}>60</Button>
-                                <Button onClick={()=>setTime("90")}>90</Button>
-                                <Button onClick={()=>setTime("120")}>120</Button>
-                                <Button onClick={()=>setTime("180")}>180</Button>
+                                <Button onClick={() => setTime("20")}>20</Button>
+                                <Button onClick={() => setTime("30")}>30</Button>
+                                <Button onClick={() => setTime("40")}>40</Button>
+                                <Button onClick={() => setTime("60")}>60</Button>
+                                <Button onClick={() => setTime("90")}>90</Button>
+                                <Button onClick={() => setTime("120")}>120</Button>
+                                <Button onClick={() => setTime("180")}>180</Button>
                             </ButtonGroup>
-                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl:1 }} value={time} onChange={changeTime} />
+                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
                         </Box>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
