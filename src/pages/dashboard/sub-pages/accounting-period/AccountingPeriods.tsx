@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NotificationContext } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import API from "../../../../common/API";
@@ -44,7 +44,6 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
     const params = useParams();
     const [AccountingPeriods, setAccountingPeriods] = useState<AccountingPeriod[]>([]);
     const notificationContext = useContext(NotificationContext);
-    const navigate = useNavigate();
     const [placeHolder, setPlaceHolder] = useState<boolean>(true);
     let id = -1;
 

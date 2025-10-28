@@ -6,7 +6,6 @@ import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
 import { TaskStatus } from "../../../../../type/TaskStatus";
-//import {TaskType,TaskStatus,TaskQuadrant} from "../../../../../type/Task";
 
 interface TaskEditDialogProps {
     openDialog: boolean,
