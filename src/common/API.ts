@@ -18,6 +18,22 @@ export default class API {
         localStorage.removeItem('user');
     }
 
+    static async putContent<D, R>(path: string, data?: D): Promise<AxiosResponse<R>> {
+        console.log("put " + this.URL + path)
+        let config: AxiosRequestConfig = {};
+
+        const user = this.getUser();
+        if (user != null) {
+            config = {
+                auth: {
+                    username: user?.user,
+                    password: user?.pass
+                }
+            };
+        }
+        return await axios.put<R, AxiosResponse<R>, D>(this.URL + path, data, config);
+    }
+    
     static async postContent<D, R>(path: string, data?: D): Promise<AxiosResponse<R>> {
         console.log("post " + this.URL + path)
         let config: AxiosRequestConfig = {};

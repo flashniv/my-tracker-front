@@ -68,7 +68,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
     return (
         <Dialog
             open={props.openDialog}
-            onClose={() => props.setOpenDialog(false)}
+            onClose={closeWindow}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >

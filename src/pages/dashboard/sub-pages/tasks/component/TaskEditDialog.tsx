@@ -27,22 +27,22 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
     }
 
     function saveTask(e: React.FormEvent) {
-        /*e.preventDefault();
-        let timeStr = "";
+        e.preventDefault();
+        /*let timeStr = "";
         if (time.length > 0) {
             timeStr = "?time=" + time;
-        }
+        }*/
 
         const newTask: Task = {
-            id: null,
+            id: props.task.id,
             name: name,
             description: description,
             taskType: TaskType[taskType as keyof typeof TaskType],
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
-            taskStatus: TaskStatus.NEW,
-            project: null
+            taskStatus: props.task.taskStatus,
+            project: props.task.project
         }
-        API.postContent<Task, string>("/project/" + props.projectId + "/createTask" + timeStr, newTask)
+        API.putContent<Task, string>("/task", newTask)
             .then(() => {
                 props.updateTasks();
                 closeWindow();
@@ -51,7 +51,7 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
                 notificationContext(error.message);
                 props.updateTasks();
                 closeWindow();
-            });*/
+            });
     }
 
     function changeTime(e: React.ChangeEvent) {
