@@ -1,0 +1,219 @@
+import { useContext, useEffect, useState } from "react";
+import { NotificationContext } from "../../../../../common/NotificationContext";
+import API from "../../../../../common/API";
+import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, TextField } from "@mui/material";
+import { TaskType } from "../../../../../type/TaskType";
+import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
+import { Task } from "../../../../../type/Task";
+import { TaskStatus } from "../../../../../type/TaskStatus";
+
+interface KanbanTaskAddDialogProps {
+    openDialog: boolean,
+    setOpenDialog: (open: boolean) => void,
+    updateTasks: () => void,
+}
+
+// function getClients(projects: Project[]): Client[] {
+//     let clients: Client[] = [];
+//     projects.forEach(project => {
+//         if (project.client != null && !clients.includes(project.client)) {
+//             clients.push(project.client);
+//         }
+//     });
+//     return clients;
+// }
+// function getProjectsByClient(projects: Project[], clientId: number): Project[] {
+//     let resProjects: Project[] = [];
+//     projects.forEach(project => {
+//         if (project.client != null && project.client.id == clientId) {
+//             resProjects.push(project);
+//         }
+//     });
+//     return resProjects;
+// }
+
+export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
+    const notificationContext = useContext(NotificationContext);
+    const [name, setName] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [time, setTime] = useState<string>("30");
+    const [taskType, setTaskType] = useState<string>(TaskType.NOT_CLASSIFIED);
+    const [taskQuadrant, setTaskQuadrant] = useState<string>(TaskQuadrant.NOT_CLASSIFIED);
+
+    const [clients, setClients] = useState<Client[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [clientId, setClientId] = useState<number>(-1);
+    const [projectId, setProjectId] = useState<number>(-1);
+
+    function updateClients() {
+        API.getContent<Client[]>("/client")
+            .then(data => {
+                setClients(data.data);
+            }).catch(error => {
+                notificationContext(error.message);
+            });
+    }
+
+    function closeWindow() {
+        setName("");
+        setDescription("");
+        setTime("30");
+        setTaskType(TaskType.NOT_CLASSIFIED);
+        setTaskQuadrant(TaskQuadrant.NOT_CLASSIFIED);
+        setClientId(-1);
+        setProjectId(-1);
+        props.setOpenDialog(false);
+    }
+
+    function saveTask(e: React.FormEvent) {
+        e.preventDefault();
+        let timeStr = "";
+        if (time.length > 0) {
+            timeStr = "?time=" + (parseInt(time)*60);
+        }
+
+        const newTask: Task = {
+            id: null,
+            name: name,
+            description: description,
+            taskType: TaskType[taskType as keyof typeof TaskType],
+            taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
+            taskStatus: TaskStatus.NEW,
+            project: null,
+            timeRecords: null
+        }
+        API.postContent<Task, string>("/project/" + projectId + "/createTask" + timeStr, newTask)
+            .then(() => {
+                props.updateTasks();
+                closeWindow();
+            })
+            .catch((error) => {
+                notificationContext(error.message);
+                props.updateTasks();
+                closeWindow();
+            });
+    }
+
+    function changeTime(e: React.ChangeEvent) {
+        if (("" + e.target.value).match("^[0-9]*$")) {
+            setTime(e.target.value);
+        }
+    }
+
+    function changeClient(event: Event) {
+        setClientId(event.target?.value);
+
+        API.getContent<Project[]>("/client/" + event.target?.value + "/projects")
+            .then(data => {
+                setProjects(data.data);
+                setProjectId(-1);
+            }).catch(error => {
+                notificationContext(error.message);
+            });
+    }
+
+    useEffect(() => {
+        updateClients();
+    }, []);
+
+    return (
+        <Dialog
+            open={props.openDialog}
+            onClose={closeWindow}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="lg"
+        >
+            <form onSubmit={saveTask}>
+                <DialogContent>
+                    <Stack spacing={2}>
+                        <Box display={"flex"} flexDirection={"row"}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Client</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={clientId}
+                                    label="Client"
+                                    onChange={changeClient}
+                                >
+                                    {clients.map((client) =>
+                                        <MenuItem key={client.id} value={client.id}>{client.name}</MenuItem>)
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth sx={{pl:2}}>
+                                <InputLabel id="demo-simple-select-label">Project</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={projectId}
+                                    label="Project"
+                                    onChange={(event) => { setProjectId(event.target.value) }}
+                                >
+                                    {projects.map((project) =>
+                                        <MenuItem key={project.id} value={project.id}>{project.name}</MenuItem>)
+                                    }
+                                </Select>
+                            </FormControl>
+
+                        </Box>
+                        <TextField id="outlined-basic" autoComplete="off" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
+                        <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
+                            <ButtonGroup variant="outlined" aria-label="Basic button group">
+                                <Button onClick={() => setTime("20")}>20</Button>
+                                <Button onClick={() => setTime("30")}>30</Button>
+                                <Button onClick={() => setTime("40")}>40</Button>
+                                <Button onClick={() => setTime("60")}>60</Button>
+                                <Button onClick={() => setTime("90")}>90</Button>
+                                <Button onClick={() => setTime("120")}>120</Button>
+                                <Button onClick={() => setTime("180")}>180</Button>
+                            </ButtonGroup>
+                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
+                        </Box>
+                        <FormControl>
+                            <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-controlled-radio-buttons-group"
+                                name="controlled-radio-buttons-group"
+                                value={taskType}
+                                onChange={(e) => { setTaskType((e.target as HTMLInputElement).value) }}
+                            >
+                                <FormControlLabel value="MICRO" control={<Radio />} label="Micro" />
+                                <FormControlLabel value="SMALL" control={<Radio />} label="Small" />
+                                <FormControlLabel value="MEDIUM" control={<Radio />} label="Medium" />
+                                <FormControlLabel value="LONG" control={<Radio />} label="Long" />
+                                <FormControlLabel value="EXTRA_LONG" control={<Radio />} label="XLong" />
+                                <FormControlLabel value="NOT_CLASSIFIED" control={<Radio />} label="Not classified" />
+                            </RadioGroup>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel id="demo-controlled-radio-buttons-group">Quadrant</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-controlled-radio-buttons-group"
+                                name="controlled-radio-buttons-group"
+                                value={taskQuadrant}
+                                onChange={(e) => { setTaskQuadrant((e.target as HTMLInputElement).value) }}
+                            >
+                                <FormControlLabel value="URGENT_IMPORTANT" control={<Radio />} label="Emergency" />
+                                <FormControlLabel value="NO_URGENT_IMPORTANT" control={<Radio />} label="Important" />
+                                <FormControlLabel value="URGENT_NO_IMPORTANT" control={<Radio />} label="Urgent" />
+                                <FormControlLabel value="NO_URGENT_NO_IMPORTANT" control={<Radio />} label="Spam" />
+                                <FormControlLabel value="NOT_CLASSIFIED" control={<Radio />} label="Not classified" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeWindow}>Cancel</Button>
+                    <Button autoFocus type="submit" disabled={clientId==-1||projectId==-1||name.length==0}>
+                        Save
+                    </Button>
+                </DialogActions>
+            </form>
+        </Dialog>
+    );
+}

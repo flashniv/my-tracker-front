@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import API from "../../../../common/API";
 import { ClientDTO } from "../../../../type/DTO/ClientDTO";
 import { NotificationContext } from "../../../../common/NotificationContext";
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import KanbanColumn from "./component/KanbanColumn";
 import { Task } from "../../../../type/Task";
 import { TimeRecord } from "../../../../type/TimeRecord";
 import { TaskStatus } from "../../../../type/TaskStatus";
+import KanbanTaskAddDialog from "./component/KanbanTaskAddDialog";
 
 interface KanbanDashboardProps {
     setTitle: (title: string) => void
@@ -16,6 +17,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
     props.setTitle("Kanban");
     const notificationContext = useContext(NotificationContext);
     const [placeHolder, setPlaceHolder] = useState<boolean>(true);
+    const [openAddDialog, setOpenAddDialog] = useState<boolean>(true);
     const [newTasks, setNewTasks] = useState<Task[]>([]);
     const [inProgTasks, setInProgTasks] = useState<Task[]>([]);
     const [blockTasks, setBlockTasks] = useState<Task[]>([]);
@@ -25,11 +27,11 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
         setPlaceHolder(true);
         API.getContent<ClientDTO[]>("/client/all?onlyActual=true")
             .then(data => {
-                let tempNewTasks:Task[]=[];
-                let tempBlockTasks:Task[]=[];
-                let tempInProgressTasks:Task[]=[];
-                let tempDoneTasks:Task[]=[];
-                
+                let tempNewTasks: Task[] = [];
+                let tempBlockTasks: Task[] = [];
+                let tempInProgressTasks: Task[] = [];
+                let tempDoneTasks: Task[] = [];
+
                 data.data.forEach(clientDTO => {
                     const client: Client = {
                         id: clientDTO.id,
@@ -97,17 +99,22 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
     }, []);
 
     return (
-        <Stack
-            minHeight={"4000px"}
-            direction="row"
-            spacing={1}
-            justifyContent={"space-around"}
-            p={1}
-        >
-            <KanbanColumn title="New" tasks={newTasks} loading={placeHolder} updateTasks={updateTasks}/>
-            <KanbanColumn title="In progress" tasks={inProgTasks} loading={placeHolder} updateTasks={updateTasks}/>
-            <KanbanColumn title="Block" tasks={blockTasks} loading={placeHolder} updateTasks={updateTasks}/>
-            <KanbanColumn title="Done" tasks={doneTasks} loading={placeHolder} updateTasks={updateTasks}/>
-        </Stack>
-    );
+        <>
+            <Box display={"flex"} justifyContent={"flex-end"} pt={1} pr={1}>
+                <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
+            </Box>
+            <Stack
+                minHeight={"4000px"}
+                direction="row"
+                spacing={1}
+                justifyContent={"space-around"}
+                p={1}
+            >
+                <KanbanColumn title="New" tasks={newTasks} loading={placeHolder} updateTasks={updateTasks} />
+                <KanbanColumn title="In progress" tasks={inProgTasks} loading={placeHolder} updateTasks={updateTasks} />
+                <KanbanColumn title="Block" tasks={blockTasks} loading={placeHolder} updateTasks={updateTasks} />
+                <KanbanColumn title="Done" tasks={doneTasks} loading={placeHolder} updateTasks={updateTasks} />
+            </Stack>
+            <KanbanTaskAddDialog openDialog={openAddDialog} setOpenDialog={setOpenAddDialog} updateTasks={updateTasks} />
+        </>);
 }
