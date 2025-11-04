@@ -5,7 +5,6 @@ import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogT
 import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
-import { TaskStatus } from "../../../../../type/TaskStatus";
 
 interface TaskEditDialogProps {
     openDialog: boolean,

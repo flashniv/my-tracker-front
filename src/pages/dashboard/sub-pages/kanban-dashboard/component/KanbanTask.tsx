@@ -1,13 +1,18 @@
 import { Box, IconButton, Menu, MenuItem, Paper } from "@mui/material";
 import { Task } from "../../../../../type/Task";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TaskStatus } from "../../../../../type/TaskStatus";
+import API from "../../../../../common/API";
+import { NotificationContext } from "../../../../../common/NotificationContext";
 
 interface KanbanTaskHeaderProps {
-    task: Task
+    task: Task,
+    updateTasks: () => void,
 }
 
 function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
+    const notificationContext = useContext(NotificationContext);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -16,6 +21,28 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    function changeTaskStatus(taskStatus: TaskStatus) {
+        setAnchorEl(null);
+        const newTask: Task = {
+            id: props.task.id,
+            name: props.task.name,
+            description: props.task.description,
+            taskType: props.task.taskType,
+            taskQuadrant: props.task.taskQuadrant,
+            taskStatus: taskStatus,
+            project: props.task.project
+        }
+        API.putContent<Task, string>("/task", newTask)
+            .then(() => {
+                props.updateTasks();
+            })
+            .catch((error) => {
+                notificationContext(error.message);
+                props.updateTasks();
+            });
+
+    }
 
     function getTime(task: Task): number {
         let time = 0;
@@ -60,9 +87,11 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                         },
                     }}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.NEW)}>New</MenuItem>
+                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
+                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.BLOCKED)}>Block</MenuItem>
+                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.DONE)}>Done</MenuItem>
+                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.ARCHIVED)}>Archive</MenuItem>
                 </Menu>
             </Box>
         </Box>
@@ -70,7 +99,8 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
 }
 
 interface KanbanTaskProps {
-    task: Task
+    task: Task,
+    updateTasks: () => void
 }
 
 export default function KanbanTask(props: KanbanTaskProps) {
@@ -78,7 +108,7 @@ export default function KanbanTask(props: KanbanTaskProps) {
         <Paper
             sx={{ p: 1 }}
         >
-            <KanbanTaskHeader task={props.task} />
+            <KanbanTaskHeader task={props.task} updateTasks={props.updateTasks}/>
             <Box pt={1}>
                 {props.task.name}
             </Box>

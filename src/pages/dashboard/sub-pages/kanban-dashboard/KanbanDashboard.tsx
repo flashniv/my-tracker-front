@@ -104,10 +104,10 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
             justifyContent={"space-around"}
             p={1}
         >
-            <KanbanColumn title="New" tasks={newTasks} loading={placeHolder}/>
-            <KanbanColumn title="In progress" tasks={inProgTasks} loading={placeHolder}/>
-            <KanbanColumn title="Block" tasks={blockTasks} loading={placeHolder}/>
-            <KanbanColumn title="Done" tasks={doneTasks} loading={placeHolder}/>
+            <KanbanColumn title="New" tasks={newTasks} loading={placeHolder} updateTasks={updateTasks}/>
+            <KanbanColumn title="In progress" tasks={inProgTasks} loading={placeHolder} updateTasks={updateTasks}/>
+            <KanbanColumn title="Block" tasks={blockTasks} loading={placeHolder} updateTasks={updateTasks}/>
+            <KanbanColumn title="Done" tasks={doneTasks} loading={placeHolder} updateTasks={updateTasks}/>
         </Stack>
     );
 }
