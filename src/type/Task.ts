@@ -10,4 +10,5 @@ export interface Task {
     taskType: TaskType,
     taskQuadrant: TaskQuadrant,
     project: Project | null
+    timeRecords: TimeRecord[] | null
 }

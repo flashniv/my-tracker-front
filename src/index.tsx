@@ -12,64 +12,65 @@ import Site from './pages/site/Site';
 import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  useEffect(() => {
-    API.getContent("/login")
-      .then(response => {
-        setLoggedIn(true);
-      })
-      .catch(error => {
-        //console.error(error);
-      });
-  }, []);
+    useEffect(() => {
+        API.getContent("/login")
+            .then(response => {
+                setLoggedIn(true);
+            })
+            .catch(error => {
+                //console.error(error);
+            });
+    }, []);
 
-  const theme = createTheme({
-    components: {
-      // Name of the component ⚛️
-      MuiButtonBase: {
-        defaultProps: {
-          // The props to apply
-          disableRipple: true, // No more ripple, on the whole application 💣!
+    const theme = createTheme({
+        components: {
+            // Name of the component ⚛️
+            MuiButtonBase: {
+                defaultProps: {
+                    // The props to apply
+                    disableRipple: true, // No more ripple, on the whole application 💣!
+                },
+            },
         },
-      },
-    },
-  });
+    });
 
-  return (
-    <ThemeProvider theme={theme}>
-      <LoginContext value={{ loggedIn, setLoggedIn }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Site />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/dashboard/client" element={<Dashboard />} />
-            <Route path="/dashboard/project">
-              <Route path=":id" element={<Dashboard />} />
-            </Route>
-            <Route path="/dashboard/accounting-period">
-              <Route path=":id" element={<Dashboard />} />
-            </Route>
-            <Route path="/dashboard/task">
-              <Route path=":id" element={<Dashboard />} />
-            </Route>
-            <Route path="/dashboard/*" element={<Dashboard />} />
-          </Routes>
-        </BrowserRouter>
-      </LoginContext>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <LoginContext value={{ loggedIn, setLoggedIn }}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Site />} />
+                        <Route path="/login" element={<LogIn />} />
+                        <Route path="/dashboard/client" element={<Dashboard />} />
+                        <Route path="/dashboard/kanban-dashboard" element={<Dashboard />} />
+                        <Route path="/dashboard/project">
+                            <Route path=":id" element={<Dashboard />} />
+                        </Route>
+                        <Route path="/dashboard/accounting-period">
+                            <Route path=":id" element={<Dashboard />} />
+                        </Route>
+                        <Route path="/dashboard/task">
+                            <Route path=":id" element={<Dashboard />} />
+                        </Route>
+                        <Route path="/dashboard/*" element={<Dashboard />} />
+                    </Routes>
+                </BrowserRouter>
+            </LoginContext>
+        </ThemeProvider>
+    );
 }
 
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

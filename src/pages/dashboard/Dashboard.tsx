@@ -8,19 +8,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Projects from './sub-pages/projects/Projects';
 import Tasks from './sub-pages/tasks/Tasks';
 import AccountingPeriods from './sub-pages/accounting-period/AccountingPeriods';
+import KanbanDashboard from './sub-pages/kanban-dashboard/KanbanDashboard';
 
-interface DashboardPageProps {
-    setTitle: (title: string) => void
-}
-
-function DashboardPage(props: DashboardPageProps) {
+function DashboardPage() {
     const navigate=useNavigate();
 
     return (
         <Container maxWidth="sm" sx={{pt:4}}>
             <Stack spacing={2}>
                 <Button variant="text" onClick={()=>{navigate("/dashboard/client")}}>Clients</Button>
-                <Button variant="text">Kanban Dashboard</Button>
+                <Button variant="text" onClick={()=>{navigate("/dashboard/kanban-dashboard")}}>Kanban Dashboard</Button>
             </Stack>
         </Container>
     );
@@ -41,8 +38,9 @@ export default function Dashboard() {
             <AppToolBar title={title} clickOpenSideBar={() => { setOpenSideBar(true) }} />
             <SideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
             <Box>
-                {location.pathname === '/dashboard' ? <DashboardPage setTitle={setTitle} /> : <></>}
+                {location.pathname === '/dashboard' ? <DashboardPage /> : <></>}
                 {location.pathname === '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
+                {location.pathname === '/dashboard/kanban-dashboard' ? <KanbanDashboard setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/accounting-period') ? <AccountingPeriods setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
