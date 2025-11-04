@@ -5,6 +5,8 @@ import { useContext, useState } from "react";
 import { TaskStatus } from "../../../../../type/TaskStatus";
 import API from "../../../../../common/API";
 import { NotificationContext } from "../../../../../common/NotificationContext";
+import TaskAddDialog from "../../tasks/component/TaskAddDialog";
+import TaskEditDialog from "../../tasks/component/TaskEditDialog";
 
 interface KanbanTaskHeaderProps {
     task: Task,
@@ -31,7 +33,8 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
             taskType: props.task.taskType,
             taskQuadrant: props.task.taskQuadrant,
             taskStatus: taskStatus,
-            project: props.task.project
+            project: props.task.project,
+            timeRecords: null
         }
         API.putContent<Task, string>("/task", newTask)
             .then(() => {
@@ -104,14 +107,16 @@ interface KanbanTaskProps {
 }
 
 export default function KanbanTask(props: KanbanTaskProps) {
-    return (
-        <Paper
-            sx={{ p: 1 }}
-        >
-            <KanbanTaskHeader task={props.task} updateTasks={props.updateTasks}/>
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+    return (<>
+        <Paper sx={{ p: 1 }} onClick={() => setOpenDialog(true)}>
+            <KanbanTaskHeader task={props.task} updateTasks={props.updateTasks} />
             <Box pt={1}>
                 {props.task.name}
             </Box>
         </Paper>
+        <TaskEditDialog openDialog={openDialog} setOpenDialog={setOpenDialog} task={props.task} updateTasks={props.updateTasks} />
+    </>
     );
 }

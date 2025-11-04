@@ -15,7 +15,7 @@ export default function KanbanColumn(props: KanbanColumnProps) {
             sx={{ width: "100%", bgcolor: "lightgray", p: 1 }}
         >
             <Box display={"flex"} justifyContent={"flex-end"}>
-                {props.loading ? <CircularProgress color="darkgrey" /> : <></>}
+                {props.loading ? <CircularProgress color="primary" /> : <></>}
                 <Typography variant="h6" gutterBottom textAlign={"center"} p={1} width={"80%"} color="#747474">
                     {props.title}
                 </Typography>

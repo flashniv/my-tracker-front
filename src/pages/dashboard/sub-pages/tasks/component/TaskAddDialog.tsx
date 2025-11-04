@@ -45,7 +45,8 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             taskType: TaskType[taskType as keyof typeof TaskType],
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
             taskStatus: TaskStatus.NEW,
-            project: null
+            project: null,
+            timeRecords: null
         }
         API.postContent<Task, string>("/project/" + props.projectId + "/createTask"+timeStr, newTask)
             .then(() => {
