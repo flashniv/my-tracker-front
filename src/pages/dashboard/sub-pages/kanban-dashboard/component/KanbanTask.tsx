@@ -55,6 +55,7 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                 time += timeRecord.duration;
             }
         });
+        time=time/60;
 
         return time;
     }

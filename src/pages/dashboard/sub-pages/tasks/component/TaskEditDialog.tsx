@@ -16,17 +16,56 @@ function getTime(task: Task): number {
             time += timeRecord.duration;
         }
     });
+    time=time/60;
 
     return time;
 }
 
 interface TaskEditDialogTimeRecordsProps {
-    task: Task
+    task: Task,
+    updateTasks: () => void,
 }
 
 function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
-    return (
+    const notificationContext = useContext(NotificationContext);
+    const [time, setTime] = useState<string>("30");
+
+    function changeTime(e: React.ChangeEvent) {
+        if (("" + e.target.value).match("^[0-9]*$")) {
+            setTime(e.target.value);
+        }
+    }
+
+    function addTime() {
+        API.postContent<null, string>("/task/" + props.task.id + "/addTimeRecord?time=" + (parseInt(time) * 60), null)
+            .then(data => {
+                props.updateTasks();
+            })
+            .catch(error => {
+                notificationContext(error.message);
+                props.updateTasks();
+            })
+    }
+
+    return (<>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <ButtonGroup variant="outlined" aria-label="Basic button group">
+                <Button onClick={() => setTime("20")}>20</Button>
+                <Button onClick={() => setTime("30")}>30</Button>
+                <Button onClick={() => setTime("40")}>40</Button>
+                <Button onClick={() => setTime("60")}>60</Button>
+                <Button onClick={() => setTime("90")}>90</Button>
+                <Button onClick={() => setTime("120")}>120</Button>
+                <Button onClick={() => setTime("180")}>180</Button>
+            </ButtonGroup>
+            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
+            <IconButton size="large" onClick={addTime}>
+                <AddIcon color="success" />
+            </IconButton>
+        </Box>
+
         <Stack>
+
             {props.task.timeRecords?.filter(value => value.accountingPeriod.open).map(timeRecord =>
                 <Box
                     key={timeRecord.id}
@@ -35,7 +74,7 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
                     p={1}
                     borderBottom={"solid lightgrey 1px"}
                 >
-                    <Box>{timeRecord.duration}</Box>
+                    <Box>{timeRecord.duration/60}</Box>
                     <Box>
                         {new Date(timeRecord.createdOn).toLocaleString()}
                         <IconButton sx={{ padding: "1px" }}>
@@ -46,6 +85,7 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
             )}
             <Typography p={1} fontWeight={"bold"}>Total:{getTime(props.task)}</Typography>
         </Stack>
+    </>
     );
 }
 
@@ -60,7 +100,6 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
     const notificationContext = useContext(NotificationContext);
     const [name, setName] = useState<string>(props.task.name);
     const [description, setDescription] = useState<string>(props.task.description);
-    const [time, setTime] = useState<string>("");
     const [taskType, setTaskType] = useState<string>(props.task.taskType);
     const [taskQuadrant, setTaskQuadrant] = useState<string>(props.task.taskQuadrant);
 
@@ -95,12 +134,6 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
                 props.updateTasks();
                 closeWindow();
             });
-    }
-
-    function changeTime(e: React.ChangeEvent) {
-        if (("" + e.target.value).match("^[0-9]*$")) {
-            setTime(e.target.value);
-        }
     }
 
     return (
@@ -151,22 +184,7 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
                         </FormControl>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Time records</FormLabel>
-                            <Box sx={{ display: "flex", justifyContent: "center" }}>
-                                <ButtonGroup variant="outlined" aria-label="Basic button group">
-                                    <Button onClick={() => setTime("20")}>20</Button>
-                                    <Button onClick={() => setTime("30")}>30</Button>
-                                    <Button onClick={() => setTime("40")}>40</Button>
-                                    <Button onClick={() => setTime("60")}>60</Button>
-                                    <Button onClick={() => setTime("90")}>90</Button>
-                                    <Button onClick={() => setTime("120")}>120</Button>
-                                    <Button onClick={() => setTime("180")}>180</Button>
-                                </ButtonGroup>
-                                <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
-                                <IconButton size="large">
-                                    <AddIcon color="success" />
-                                </IconButton>
-                            </Box>
-                            <TaskEditDialogTimeRecords task={props.task} />
+                            <TaskEditDialogTimeRecords task={props.task} updateTasks={props.updateTasks}/>
                         </FormControl>
                     </Stack>
                 </DialogContent>
