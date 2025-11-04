@@ -19,13 +19,16 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+        event.stopPropagation();
     };
-    const handleClose = () => {
+    const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(null);
+        event.stopPropagation();
     };
 
-    function changeTaskStatus(taskStatus: TaskStatus) {
+    function changeTaskStatus(event: React.MouseEvent<HTMLLIElement>,taskStatus: TaskStatus) {
         setAnchorEl(null);
+        event.stopPropagation();
         const newTask: Task = {
             id: props.task.id,
             name: props.task.name,
@@ -55,7 +58,7 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                 time += timeRecord.duration;
             }
         });
-        time=time/60;
+        time = time / 60;
 
         return time;
     }
@@ -91,11 +94,11 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                         },
                     }}
                 >
-                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.NEW)}>New</MenuItem>
-                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
-                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.BLOCKED)}>Block</MenuItem>
-                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.DONE)}>Done</MenuItem>
-                    <MenuItem onClick={() => changeTaskStatus(TaskStatus.ARCHIVED)}>Archive</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.NEW)}>New</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.BLOCKED)}>Block</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.DONE)}>Done</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.ARCHIVED)}>Archive</MenuItem>
                 </Menu>
             </Box>
         </Box>

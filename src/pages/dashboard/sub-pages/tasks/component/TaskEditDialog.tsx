@@ -46,6 +46,16 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
                 props.updateTasks();
             })
     }
+    function deleteTimeRecord(id:number) {
+        API.postContent<null, string>("/task/" + props.task.id + "/removeTimeRecord/"+id, null)
+            .then(data => {
+                props.updateTasks();
+            })
+            .catch(error => {
+                notificationContext(error.message);
+                props.updateTasks();
+            })
+    }
 
     return (<>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -77,7 +87,7 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
                     <Box>{timeRecord.duration/60}</Box>
                     <Box>
                         {new Date(timeRecord.createdOn).toLocaleString()}
-                        <IconButton sx={{ padding: "1px" }}>
+                        <IconButton sx={{ padding: "1px" }} onClick={()=>deleteTimeRecord(timeRecord.id)}>
                             <DeleteIcon color="error" />
                         </IconButton>
                     </Box>
