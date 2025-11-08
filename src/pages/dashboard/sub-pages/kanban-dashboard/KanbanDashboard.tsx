@@ -8,6 +8,7 @@ import { Task } from "../../../../type/Task";
 import { TimeRecord } from "../../../../type/TimeRecord";
 import { TaskStatus } from "../../../../type/TaskStatus";
 import KanbanTaskAddDialog from "./component/KanbanTaskAddDialog";
+import { KanbanTasksContext } from "./component/KanbanTaskContext";
 
 interface KanbanDashboardProps {
     setTitle: (title: string) => void
@@ -17,20 +18,14 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
     props.setTitle("Kanban");
     const notificationContext = useContext(NotificationContext);
     const [placeHolder, setPlaceHolder] = useState<boolean>(true);
-    const [openAddDialog, setOpenAddDialog] = useState<boolean>(true);
-    const [newTasks, setNewTasks] = useState<Task[]>([]);
-    const [inProgTasks, setInProgTasks] = useState<Task[]>([]);
-    const [blockTasks, setBlockTasks] = useState<Task[]>([]);
-    const [doneTasks, setDoneTasks] = useState<Task[]>([]);
+    const [openAddDialog, setOpenAddDialog] = useState<boolean>(false);
+    const [tasks,setTasks] = useState<Task[]>([]);
 
     function updateTasks() {
         setPlaceHolder(true);
         API.getContent<ClientDTO[]>("/client/all?onlyActual=true")
             .then(data => {
-                let tempNewTasks: Task[] = [];
-                let tempBlockTasks: Task[] = [];
-                let tempInProgressTasks: Task[] = [];
-                let tempDoneTasks: Task[] = [];
+                let tempTasks: Task[] = [];
 
                 data.data.forEach(clientDTO => {
                     const client: Client = {
@@ -65,27 +60,11 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                                 project: project,
                                 timeRecords: tieRecords
                             };
-                            switch (task.taskStatus) {
-                                case TaskStatus.NEW:
-                                    tempNewTasks.push(task);
-                                    break;
-                                case TaskStatus.IN_PROGRESS:
-                                    tempInProgressTasks.push(task);
-                                    break;
-                                case TaskStatus.BLOCKED:
-                                    tempBlockTasks.push(task);
-                                    break;
-                                case TaskStatus.DONE:
-                                    tempDoneTasks.push(task);
-                                    break;
-                            }
+                            tempTasks.push(task);
                         });
                     });
                 });
-                setNewTasks(tempNewTasks);
-                setInProgTasks(tempInProgressTasks);
-                setBlockTasks(tempBlockTasks);
-                setDoneTasks(tempDoneTasks);
+                setTasks(tempTasks);
                 setPlaceHolder(false);
             })
             .catch(error => {
@@ -99,7 +78,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
     }, []);
 
     return (
-        <>
+        <KanbanTasksContext.Provider value={[tasks,updateTasks]}>
             <Box display={"flex"} justifyContent={"flex-end"} pt={1} pr={1}>
                 <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
             </Box>
@@ -110,11 +89,11 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                 justifyContent={"space-around"}
                 p={1}
             >
-                <KanbanColumn title="New" tasks={newTasks} loading={placeHolder} updateTasks={updateTasks} />
-                <KanbanColumn title="In progress" tasks={inProgTasks} loading={placeHolder} updateTasks={updateTasks} />
-                <KanbanColumn title="Block" tasks={blockTasks} loading={placeHolder} updateTasks={updateTasks} />
-                <KanbanColumn title="Done" tasks={doneTasks} loading={placeHolder} updateTasks={updateTasks} />
+                <KanbanColumn title="New" taskStatus={TaskStatus.NEW} loading={placeHolder} />
+                <KanbanColumn title="In progress" taskStatus={TaskStatus.IN_PROGRESS} loading={placeHolder} />
+                <KanbanColumn title="Block" taskStatus={TaskStatus.BLOCKED} loading={placeHolder} />
+                <KanbanColumn title="Done" taskStatus={TaskStatus.DONE} loading={placeHolder} />
             </Stack>
             <KanbanTaskAddDialog openDialog={openAddDialog} setOpenDialog={setOpenAddDialog} updateTasks={updateTasks} />
-        </>);
+        </KanbanTasksContext.Provider>);
 }

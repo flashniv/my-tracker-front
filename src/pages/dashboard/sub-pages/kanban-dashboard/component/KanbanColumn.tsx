@@ -1,15 +1,18 @@
 import { Box, CircularProgress, Paper, Stack, Typography } from "@mui/material";
-import { Task } from "../../../../../type/Task";
 import KanbanTask from "./KanbanTask";
+import { KanbanTasksContext } from "./KanbanTaskContext";
+import { useContext } from "react";
+import { TaskStatus } from "../../../../../type/TaskStatus";
 
 interface KanbanColumnProps {
     title: string,
     loading: boolean,
-    updateTasks: () => void,
-    tasks: Task[]
+    taskStatus: TaskStatus
 }
 
 export default function KanbanColumn(props: KanbanColumnProps) {
+    const kanbanTasksContext = useContext(KanbanTasksContext);
+
     return (
         <Paper
             sx={{ width: "100%", bgcolor: "lightgray", p: 1 }}
@@ -21,7 +24,7 @@ export default function KanbanColumn(props: KanbanColumnProps) {
                 </Typography>
             </Box>
             <Stack spacing={1}>
-                {props.tasks.map(task => <KanbanTask key={task.id} task={task} updateTasks={props.updateTasks}/>)}
+                {kanbanTasksContext[0].filter((value => value.taskStatus === props.taskStatus)).map(task => <KanbanTask key={task.id} task={task} />)}
             </Stack>
         </Paper>
     );

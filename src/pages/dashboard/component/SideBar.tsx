@@ -34,6 +34,7 @@ export default function SideBar(props: SideBarProps) {
         <Drawer open={props.openSideBar} onClose={() => props.setOpenSideBar(false)}>
             <List sx={{minWidth:"250px"}}>
                 <SideBarItem text="Dashboard" icon={<InboxIcon />} onClick={() => { navigate("/dashboard"); props.setOpenSideBar(false); }} />
+                <SideBarItem text="Kanban dashboard" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/kanban-dashboard"); props.setOpenSideBar(false); }} />
                 <SideBarItem text="Client" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/client"); props.setOpenSideBar(false); }} />
             </List>
         </Drawer>

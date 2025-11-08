@@ -1,114 +1,26 @@
 import { useContext, useState } from "react";
 import { NotificationContext } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
-import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
+import { KanbanTasksContext } from "./KanbanTaskContext";
+import { KanbanTaskEditDialogTimeRecords } from "./KanbanTaskEditDialogTimeRecords";
 
-function getTime(task: Task): number {
-    let time = 0;
-
-    task.timeRecords?.forEach(timeRecord => {
-        if (timeRecord.accountingPeriod.open) {
-            time += timeRecord.duration;
-        }
-    });
-    time = time / 60;
-
-    return time;
-}
-
-interface TaskEditDialogTimeRecordsProps {
-    task: Task,
-    updateTasks: () => void,
-}
-
-function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
-    const notificationContext = useContext(NotificationContext);
-    const [time, setTime] = useState<string>("30");
-
-    function changeTime(e: React.ChangeEvent) {
-        if (("" + e.target.value).match("^[0-9]*$")) {
-            setTime(e.target.value);
-        }
-    }
-
-    function addTime() {
-        API.postContent<null, string>("/task/" + props.task.id + "/addTimeRecord?time=" + (parseInt(time) * 60), null)
-            .then(data => {
-                props.updateTasks();
-            })
-            .catch(error => {
-                notificationContext(error.message);
-                props.updateTasks();
-            })
-    }
-    function deleteTimeRecord(id: number) {
-        API.postContent<null, string>("/task/" + props.task.id + "/removeTimeRecord/" + id, null)
-            .then(data => {
-                props.updateTasks();
-            })
-            .catch(error => {
-                notificationContext(error.message);
-                props.updateTasks();
-            })
-    }
-
-    return (<>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <ButtonGroup variant="outlined" aria-label="Basic button group">
-                <Button onClick={() => setTime("20")}>20</Button>
-                <Button onClick={() => setTime("30")}>30</Button>
-                <Button onClick={() => setTime("40")}>40</Button>
-                <Button onClick={() => setTime("60")}>60</Button>
-                <Button onClick={() => setTime("90")}>90</Button>
-                <Button onClick={() => setTime("120")}>120</Button>
-                <Button onClick={() => setTime("180")}>180</Button>
-            </ButtonGroup>
-            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
-            <IconButton size="large" onClick={addTime}>
-                <AddIcon color="success" />
-            </IconButton>
-        </Box>
-
-        <Grid container
-            sx={{ border: "solid lightgrey 1px" }}
-        >
-            {props.task.timeRecords?.filter(value => value.accountingPeriod.open).map(timeRecord =>
-                <>
-                    <Grid size={4}>{timeRecord.duration / 60}</Grid>
-                    <Grid size={4}>
-                        {new Date(timeRecord.createdOn).toLocaleString()}
-                    </Grid>
-                    <Grid size={4}>
-                        <IconButton sx={{ padding: "1px" }} onClick={() => deleteTimeRecord(timeRecord.id)}>
-                            <DeleteIcon color="error" />
-                        </IconButton>
-                    </Grid>
-                </>
-            )}
-            <Typography p={1} fontWeight={"bold"}>Total:{getTime(props.task)}</Typography>
-        </Grid>
-    </>
-    );
-}
-
-interface TaskEditDialogProps {
+interface KanbanTaskEditDialogProps {
     openDialog: boolean,
     setOpenDialog: (open: boolean) => void,
-    updateTasks: () => void,
     task: Task
 }
 
-export default function TaskEditDialog(props: TaskEditDialogProps) {
+export default function KanbanTaskEditDialog(props: KanbanTaskEditDialogProps) {
     const notificationContext = useContext(NotificationContext);
     const [name, setName] = useState<string>(props.task.name);
     const [description, setDescription] = useState<string>(props.task.description);
     const [taskType, setTaskType] = useState<string>(props.task.taskType);
     const [taskQuadrant, setTaskQuadrant] = useState<string>(props.task.taskQuadrant);
+    const kanbanTasksContext = useContext(KanbanTasksContext);
 
     function closeWindow() {
         props.setOpenDialog(false);
@@ -133,12 +45,12 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
         }
         API.putContent<Task, string>("/task", newTask)
             .then(() => {
-                props.updateTasks();
+                kanbanTasksContext[1]();
                 closeWindow();
             })
             .catch((error) => {
                 notificationContext(error.message);
-                props.updateTasks();
+                kanbanTasksContext[1]();
                 closeWindow();
             });
     }
@@ -191,7 +103,7 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
                         </FormControl>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Time records</FormLabel>
-                            <TaskEditDialogTimeRecords task={props.task} updateTasks={props.updateTasks} />
+                            <KanbanTaskEditDialogTimeRecords task={props.task} />
                         </FormControl>
                     </Stack>
                 </DialogContent>

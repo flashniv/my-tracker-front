@@ -7,16 +7,19 @@ import API from "../../../../../common/API";
 import { NotificationContext } from "../../../../../common/NotificationContext";
 import TaskAddDialog from "../../tasks/component/TaskAddDialog";
 import TaskEditDialog from "../../tasks/component/TaskEditDialog";
+import { KanbanTasksContext } from "./KanbanTaskContext";
+import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
 
 interface KanbanTaskHeaderProps {
-    task: Task,
-    updateTasks: () => void,
+    task: Task
 }
 
 function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
     const notificationContext = useContext(NotificationContext);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const kanbanTasksContext = useContext(KanbanTasksContext);
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
         event.stopPropagation();
@@ -41,11 +44,11 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
         }
         API.putContent<Task, string>("/task", newTask)
             .then(() => {
-                props.updateTasks();
+                kanbanTasksContext[1]();
             })
             .catch((error) => {
                 notificationContext(error.message);
-                props.updateTasks();
+                kanbanTasksContext[1]();
             });
 
     }
@@ -106,21 +109,21 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
 }
 
 interface KanbanTaskProps {
-    task: Task,
-    updateTasks: () => void
+    task: Task
 }
 
 export default function KanbanTask(props: KanbanTaskProps) {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const kanbanTasksContext = useContext(KanbanTasksContext);
 
     return (<>
         <Paper sx={{ p: 1 }} onClick={() => setOpenDialog(true)}>
-            <KanbanTaskHeader task={props.task} updateTasks={props.updateTasks} />
+            <KanbanTaskHeader task={props.task} />
             <Box pt={1}>
                 {props.task.name}
             </Box>
         </Paper>
-        <TaskEditDialog openDialog={openDialog} setOpenDialog={setOpenDialog} task={props.task} updateTasks={props.updateTasks} />
+        <KanbanTaskEditDialog openDialog={openDialog} setOpenDialog={setOpenDialog} task={props.task} />
     </>
     );
 }
