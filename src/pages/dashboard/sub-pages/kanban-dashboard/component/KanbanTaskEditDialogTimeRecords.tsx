@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { NotificationContext } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
 import { Box, Button, ButtonGroup, Grid, IconButton, TextField, Typography } from "@mui/material";
@@ -6,6 +6,13 @@ import { Task } from "../../../../../type/Task";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { KanbanTasksContext } from "./KanbanTaskContext";
+
+const cellStyle = {
+    p:1,
+    display: "flex",
+    alignItems: "center",
+    borderBottom: "1px solid lightgray"
+} 
 
 function getTime(task: Task): number {
     let time = 0;
@@ -57,7 +64,7 @@ export function KanbanTaskEditDialogTimeRecords(props: KanbanTaskEditDialogTimeR
     }
 
     return (<>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{display: "flex", justifyContent: "center" }}>
             <ButtonGroup variant="outlined" aria-label="Basic button group">
                 <Button onClick={() => setTime("20")}>20</Button>
                 <Button onClick={() => setTime("30")}>30</Button>
@@ -74,20 +81,20 @@ export function KanbanTaskEditDialogTimeRecords(props: KanbanTaskEditDialogTimeR
         </Box>
 
         <Grid container
-            sx={{ border: "solid lightgrey 1px" }}
+            sx={{ border: "solid lightgrey 1px",mt:1 }}
         >
             {props.task.timeRecords?.filter(value => value.accountingPeriod.open).map(timeRecord =>
-                <>
-                    <Grid size={2}>{timeRecord.duration / 60}</Grid>
-                    <Grid size={8}>
+                <Fragment key={timeRecord.id}>
+                    <Grid size={2} sx={cellStyle}>{timeRecord.duration / 60}</Grid>
+                    <Grid size={9} sx={cellStyle}>
                         {new Date(timeRecord.createdOn).toLocaleString()}
                     </Grid>
-                    <Grid size={2}>
+                    <Grid size={1} sx={cellStyle}>
                         <IconButton sx={{ padding: "1px" }} onClick={() => deleteTimeRecord(timeRecord.id)}>
                             <DeleteIcon color="error" />
                         </IconButton>
                     </Grid>
-                </>
+                </Fragment>
             )}
             <Typography p={1} fontWeight={"bold"}>Total:{getTime(props.task)}</Typography>
         </Grid>

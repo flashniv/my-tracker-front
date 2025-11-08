@@ -80,6 +80,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
             taskStatus: TaskStatus.NEW,
             project: null,
+            createdOn: new Date(),
             timeRecords: null
         }
         API.postContent<Task, string>("/project/" + projectId + "/createTask" + timeStr, newTask)

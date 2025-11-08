@@ -41,6 +41,7 @@ export default function KanbanTaskEditDialog(props: KanbanTaskEditDialogProps) {
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
             taskStatus: props.task.taskStatus,
             project: props.task.project,
+            createdOn: new Date(),
             timeRecords: null
         }
         API.putContent<Task, string>("/task", newTask)
@@ -61,7 +62,7 @@ export default function KanbanTaskEditDialog(props: KanbanTaskEditDialogProps) {
             onClose={() => props.setOpenDialog(false)}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            maxWidth={"lg"}
+            maxWidth={"sm"}
         >
             <form onSubmit={saveTask}>
                 <DialogContent>

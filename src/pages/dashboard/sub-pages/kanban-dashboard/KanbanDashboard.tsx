@@ -58,6 +58,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                                 taskStatus: taskDTO.taskStatus,
                                 taskQuadrant: taskDTO.taskQuadrant,
                                 project: project,
+                                createdOn: taskDTO.createdOn,
                                 timeRecords: tieRecords
                             };
                             tempTasks.push(task);

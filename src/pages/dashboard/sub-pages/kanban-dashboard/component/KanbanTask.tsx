@@ -5,8 +5,6 @@ import { useContext, useState } from "react";
 import { TaskStatus } from "../../../../../type/TaskStatus";
 import API from "../../../../../common/API";
 import { NotificationContext } from "../../../../../common/NotificationContext";
-import TaskAddDialog from "../../tasks/component/TaskAddDialog";
-import TaskEditDialog from "../../tasks/component/TaskEditDialog";
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
 
@@ -40,6 +38,7 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
             taskQuadrant: props.task.taskQuadrant,
             taskStatus: taskStatus,
             project: props.task.project,
+            createdOn: new Date(),
             timeRecords: null
         }
         API.putContent<Task, string>("/task", newTask)
@@ -114,7 +113,6 @@ interface KanbanTaskProps {
 
 export default function KanbanTask(props: KanbanTaskProps) {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
-    const kanbanTasksContext = useContext(KanbanTasksContext);
 
     return (<>
         <Paper sx={{ p: 1 }} onClick={() => setOpenDialog(true)}>

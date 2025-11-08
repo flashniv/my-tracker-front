@@ -129,6 +129,7 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
             taskStatus: props.task.taskStatus,
             project: props.task.project,
+            createdOn: new Date(),
             timeRecords: null
         }
         API.putContent<Task, string>("/task", newTask)

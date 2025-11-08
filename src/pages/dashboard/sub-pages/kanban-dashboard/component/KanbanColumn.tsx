@@ -3,11 +3,19 @@ import KanbanTask from "./KanbanTask";
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import { useContext } from "react";
 import { TaskStatus } from "../../../../../type/TaskStatus";
+import { Task } from "../../../../../type/Task";
 
 interface KanbanColumnProps {
     title: string,
     loading: boolean,
     taskStatus: TaskStatus
+}
+
+function sortFunc(a: Task, b: Task): number {
+    const aTime=new Date(a.createdOn);
+    const bTime=new Date(b.createdOn);
+    
+    return aTime.getTime() - bTime.getTime();
 }
 
 export default function KanbanColumn(props: KanbanColumnProps) {
@@ -24,7 +32,7 @@ export default function KanbanColumn(props: KanbanColumnProps) {
                 </Typography>
             </Box>
             <Stack spacing={1}>
-                {kanbanTasksContext[0].filter((value => value.taskStatus === props.taskStatus)).map(task => <KanbanTask key={task.id} task={task} />)}
+                {kanbanTasksContext[0].filter((value => value.taskStatus === props.taskStatus)).sort(sortFunc).map(task => <KanbanTask key={task.id} task={task} />)}
             </Stack>
         </Paper>
     );

@@ -33,9 +33,9 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
 
     function saveTask(e: React.FormEvent) {
         e.preventDefault();
-        let timeStr="";
-        if(time.length>0){
-            timeStr="?time="+time;
+        let timeStr = "";
+        if (time.length > 0) {
+            timeStr = "?time=" + time;
         }
 
         const newTask: Task = {
@@ -46,9 +46,10 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             taskQuadrant: TaskQuadrant[taskQuadrant as keyof typeof TaskQuadrant],
             taskStatus: TaskStatus.NEW,
             project: null,
+            createdOn: new Date(),
             timeRecords: null
         }
-        API.postContent<Task, string>("/project/" + props.projectId + "/createTask"+timeStr, newTask)
+        API.postContent<Task, string>("/project/" + props.projectId + "/createTask" + timeStr, newTask)
             .then(() => {
                 props.updateTasks();
                 closeWindow();
@@ -83,15 +84,15 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                         <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
                             <ButtonGroup variant="outlined" aria-label="Basic button group">
-                                <Button onClick={()=>setTime("20")}>20</Button>
-                                <Button onClick={()=>setTime("30")}>30</Button>
-                                <Button onClick={()=>setTime("40")}>40</Button>
-                                <Button onClick={()=>setTime("60")}>60</Button>
-                                <Button onClick={()=>setTime("90")}>90</Button>
-                                <Button onClick={()=>setTime("120")}>120</Button>
-                                <Button onClick={()=>setTime("180")}>180</Button>
+                                <Button onClick={() => setTime("20")}>20</Button>
+                                <Button onClick={() => setTime("30")}>30</Button>
+                                <Button onClick={() => setTime("40")}>40</Button>
+                                <Button onClick={() => setTime("60")}>60</Button>
+                                <Button onClick={() => setTime("90")}>90</Button>
+                                <Button onClick={() => setTime("120")}>120</Button>
+                                <Button onClick={() => setTime("180")}>180</Button>
                             </ButtonGroup>
-                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl:1 }} value={time} onChange={changeTime} />
+                            <TextField autoComplete="off" label="Time" variant="outlined" sx={{ minWidth: "70px", pl: 1 }} value={time} onChange={changeTime} />
                         </Box>
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
