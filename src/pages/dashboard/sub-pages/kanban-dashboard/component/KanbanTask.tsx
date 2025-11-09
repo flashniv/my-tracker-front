@@ -121,7 +121,7 @@ export default function KanbanTask(props: KanbanTaskProps) {
                 p: 1,
                 border: "1px solid #aaaaaaff",
                 borderRadius: "10px",
-                boxShadow: "0px 0px 15px lightgrey"
+                boxShadow: "3px 3px 5px #c6c2c2ff"
             }}
             onClick={() => setOpenDialog(true)}
         >

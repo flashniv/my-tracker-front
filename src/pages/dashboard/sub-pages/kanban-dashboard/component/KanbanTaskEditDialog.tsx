@@ -68,7 +68,7 @@ export default function KanbanTaskEditDialog(props: KanbanTaskEditDialogProps) {
                 <DialogContent>
                     <Stack spacing={2}>
                         <TextField id="outlined-basic" autoComplete="off" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
-                        <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={2} value={description} onChange={(e) => setDescription(e.target.value)} />
                         <FormControl>
                             <FormLabel id="demo-controlled-radio-buttons-group">Duration</FormLabel>
                             <RadioGroup

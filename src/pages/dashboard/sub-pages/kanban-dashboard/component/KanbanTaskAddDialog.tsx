@@ -145,7 +145,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
 
                         </Box>
                         <TextField id="outlined-basic" autoComplete="off" label="Task" variant="outlined" fullWidth sx={{ minWidth: "500px" }} value={name} onChange={(e) => setName(e.target.value)} />
-                        <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <TextField id="outlined-basic" label="Description" variant="outlined" fullWidth sx={{ minWidth: "500px" }} multiline rows={2} value={description} onChange={(e) => setDescription(e.target.value)} />
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
                             <ButtonGroup variant="outlined" aria-label="Basic button group">
                                 <Button onClick={() => setTime("20")}>20</Button>
