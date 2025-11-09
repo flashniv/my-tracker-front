@@ -110,7 +110,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
         if (filterTaskQuadrant.localeCompare("null") != 0 && value.taskQuadrant != filterTaskQuadrant) {
             res = false;
         }
-        if (value.project != null && value.project.client != null){
+        if (value.project != null && value.project.client != null) {
             if (filterText.localeCompare("") != 0 && !(value.project?.client?.name + value.project?.name).toLowerCase().includes(filterText.toLowerCase())) {
                 res = false;
             }
@@ -120,50 +120,52 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
 
     return (
         <KanbanTasksContext.Provider value={[tasks.filter(filterTasks), updateTasks]}>
-            <Box display={"flex"} justifyContent={"flex-end"} pt={1} pr={1}>
-                <TextField label="Search" variant="standard" value={filterText} onChange={e => setFilterText(e.target.value)} />
-                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-simple-select-standard-label1">Quadrant</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-standard-label1"
-                        id="demo-simple-select-standard1"
-                        value={filterTaskQuadrant}
-                        onChange={(e) => { changeFilterTaskQuadrant(e.target.value) }}
-                        label="Quadrant"
-                    >
-                        <MenuItem value="null">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={TaskQuadrant.NOT_CLASSIFIED}>Not classified</MenuItem>
-                        <MenuItem value={TaskQuadrant.URGENT_IMPORTANT}>Emergency</MenuItem>
-                        <MenuItem value={TaskQuadrant.NO_URGENT_IMPORTANT}>Important</MenuItem>
-                        <MenuItem value={TaskQuadrant.URGENT_NO_IMPORTANT}>Urgent</MenuItem>
-                        <MenuItem value={TaskQuadrant.NO_URGENT_NO_IMPORTANT}>Spam</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-standard-label"
-                        id="demo-simple-select-standard"
-                        value={filterTaskType}
-                        onChange={(e) => { changeFilterTaskType(e.target.value) }}
-                        label="Type"
-                    >
-                        <MenuItem value="null">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={TaskType.NOT_CLASSIFIED}>Not classified</MenuItem>
-                        <MenuItem value={TaskType.MICRO}>Micro</MenuItem>
-                        <MenuItem value={TaskType.SMALL}>Small</MenuItem>
-                        <MenuItem value={TaskType.MEDIUM}>Medium</MenuItem>
-                        <MenuItem value={TaskType.LONG}>Long</MenuItem>
-                        <MenuItem value={TaskType.EXTRA_LONG}>Extra long</MenuItem>
-                    </Select>
-                </FormControl>
-                <IconButton onClick={()=>{setFilterText(""); setFilterTaskType("null"); setFilterTaskQuadrant("null");}}>
-                    <ClearIcon/>
-                </IconButton>
+            <Box display={"flex"} justifyContent={"space-between"} pt={1} pr={1} pl={2}>
+                <Box display={"flex"} alignItems={"center"}>
+                    <TextField label="Search" variant="standard" value={filterText} onChange={e => setFilterText(e.target.value)} sx={{minWidth:"170px"}} />
+                    <FormControl sx={{ m: 1, minWidth: 170 }} size="small">
+                        <InputLabel id="demo-simple-select-standard-label1">Quadrant</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label1"
+                            id="demo-simple-select-standard1"
+                            value={filterTaskQuadrant}
+                            onChange={(e) => { changeFilterTaskQuadrant(e.target.value) }}
+                            label="Quadrant"
+                        >
+                            <MenuItem value="null">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={TaskQuadrant.NOT_CLASSIFIED}>Not classified</MenuItem>
+                            <MenuItem value={TaskQuadrant.URGENT_IMPORTANT}>Emergency</MenuItem>
+                            <MenuItem value={TaskQuadrant.NO_URGENT_IMPORTANT}>Important</MenuItem>
+                            <MenuItem value={TaskQuadrant.URGENT_NO_IMPORTANT}>Urgent</MenuItem>
+                            <MenuItem value={TaskQuadrant.NO_URGENT_NO_IMPORTANT}>Spam</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 170 }} size="small">
+                        <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select-standard"
+                            value={filterTaskType}
+                            onChange={(e) => { changeFilterTaskType(e.target.value) }}
+                            label="Type"
+                        >
+                            <MenuItem value="null">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={TaskType.NOT_CLASSIFIED}>Not classified</MenuItem>
+                            <MenuItem value={TaskType.MICRO}>Micro</MenuItem>
+                            <MenuItem value={TaskType.SMALL}>Small</MenuItem>
+                            <MenuItem value={TaskType.MEDIUM}>Medium</MenuItem>
+                            <MenuItem value={TaskType.LONG}>Long</MenuItem>
+                            <MenuItem value={TaskType.EXTRA_LONG}>Extra long</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <IconButton onClick={() => { setFilterText(""); setFilterTaskType("null"); setFilterTaskQuadrant("null"); }}>
+                        <ClearIcon />
+                    </IconButton>
+                </Box>
                 <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
             </Box>
             <Stack

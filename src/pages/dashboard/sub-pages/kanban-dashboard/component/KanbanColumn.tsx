@@ -12,9 +12,9 @@ interface KanbanColumnProps {
 }
 
 function sortFunc(a: Task, b: Task): number {
-    const aTime=new Date(a.createdOn);
-    const bTime=new Date(b.createdOn);
-    
+    const aTime = new Date(a.createdOn);
+    const bTime = new Date(b.createdOn);
+
     return aTime.getTime() - bTime.getTime();
 }
 
@@ -23,11 +23,11 @@ export default function KanbanColumn(props: KanbanColumnProps) {
 
     return (
         <Paper
-            sx={{ width: "100%", bgcolor: "lightgray", p: 1 }}
+            sx={{ width: "100%", bgcolor: "primary.main", p: 1 }}
         >
             <Box display={"flex"} justifyContent={"flex-end"}>
-                {props.loading ? <CircularProgress color="primary" /> : <></>}
-                <Typography variant="h6" gutterBottom textAlign={"center"} p={1} width={"80%"} color="#747474">
+                {props.loading ? <CircularProgress sx={{ color: "primary.contrastText" }} /> : <></>}
+                <Typography variant="h6" gutterBottom textAlign={"center"} p={1} width={"80%"} color={"primary.contrastText"}>
                     {props.title}
                 </Typography>
             </Box>
