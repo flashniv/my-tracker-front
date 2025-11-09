@@ -6,6 +6,8 @@ import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
 import { TaskStatus } from "../../../../../type/TaskStatus";
+import { ClientDTO } from "../../../../../type/DTO/ClientDTO";
+import { ProjectDTO } from "../../../../../type/DTO/ProjectDTO";
 
 interface KanbanTaskAddDialogProps {
     openDialog: boolean,
@@ -13,24 +15,15 @@ interface KanbanTaskAddDialogProps {
     updateTasks: () => void,
 }
 
-// function getClients(projects: Project[]): Client[] {
-//     let clients: Client[] = [];
-//     projects.forEach(project => {
-//         if (project.client != null && !clients.includes(project.client)) {
-//             clients.push(project.client);
-//         }
-//     });
-//     return clients;
-// }
-// function getProjectsByClient(projects: Project[], clientId: number): Project[] {
-//     let resProjects: Project[] = [];
-//     projects.forEach(project => {
-//         if (project.client != null && project.client.id == clientId) {
-//             resProjects.push(project);
-//         }
-//     });
-//     return resProjects;
-// }
+function getProjectsByClient(clients: ClientDTO[], clientId: number): ProjectDTO[] {
+    let resProjects: ProjectDTO[] = [];
+    clients.forEach(client => {
+        if (client.id === clientId) {
+            resProjects = client.projects;
+        }
+    });
+    return resProjects;
+}
 
 export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
     const notificationContext = useContext(NotificationContext);
@@ -40,13 +33,12 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
     const [taskType, setTaskType] = useState<string>(TaskType.NOT_CLASSIFIED);
     const [taskQuadrant, setTaskQuadrant] = useState<string>(TaskQuadrant.NOT_CLASSIFIED);
 
-    const [clients, setClients] = useState<Client[]>([]);
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [clients, setClients] = useState<ClientDTO[]>([]);
     const [clientId, setClientId] = useState<number>(-1);
     const [projectId, setProjectId] = useState<number>(-1);
 
     function updateClients() {
-        API.getContent<Client[]>("/client")
+        API.getContent<ClientDTO[]>("/client/dto")
             .then(data => {
                 setClients(data.data);
             }).catch(error => {
@@ -69,7 +61,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
         e.preventDefault();
         let timeStr = "";
         if (time.length > 0) {
-            timeStr = "?time=" + (parseInt(time)*60);
+            timeStr = "?time=" + (parseInt(time) * 60);
         }
 
         const newTask: Task = {
@@ -103,14 +95,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
 
     function changeClient(event: Event) {
         setClientId(event.target?.value);
-
-        API.getContent<Project[]>("/client/" + event.target?.value + "/projects")
-            .then(data => {
-                setProjects(data.data);
-                setProjectId(-1);
-            }).catch(error => {
-                notificationContext(error.message);
-            });
+        setProjectId(-1);
     }
 
     useEffect(() => {
@@ -143,7 +128,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
                                     }
                                 </Select>
                             </FormControl>
-                            <FormControl fullWidth sx={{pl:2}}>
+                            <FormControl fullWidth sx={{ pl: 2 }}>
                                 <InputLabel id="demo-simple-select-label">Project</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -152,7 +137,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
                                     label="Project"
                                     onChange={(event) => { setProjectId(event.target.value) }}
                                 >
-                                    {projects.map((project) =>
+                                    {getProjectsByClient(clients, clientId).map((project) =>
                                         <MenuItem key={project.id} value={project.id}>{project.name}</MenuItem>)
                                     }
                                 </Select>
@@ -210,7 +195,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeWindow}>Cancel</Button>
-                    <Button autoFocus type="submit" disabled={clientId==-1||projectId==-1||name.length==0}>
+                    <Button autoFocus type="submit" disabled={clientId == -1 || projectId == -1 || name.length == 0}>
                         Save
                     </Button>
                 </DialogActions>

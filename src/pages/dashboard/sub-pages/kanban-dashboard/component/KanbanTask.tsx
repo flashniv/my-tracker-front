@@ -27,7 +27,7 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
         event.stopPropagation();
     };
 
-    function changeTaskStatus(event: React.MouseEvent<HTMLLIElement>,taskStatus: TaskStatus) {
+    function changeTaskStatus(event: React.MouseEvent<HTMLLIElement>, taskStatus: TaskStatus) {
         setAnchorEl(null);
         event.stopPropagation();
         const newTask: Task = {
@@ -96,11 +96,11 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                         },
                     }}
                 >
-                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.NEW)}>New</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.BLOCKED)}>Block</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.DONE)}>Done</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event,TaskStatus.ARCHIVED)}>Archive</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.NEW)}>New</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.BLOCKED)}>Block</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.DONE)}>Done</MenuItem>
+                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.ARCHIVED)}>Archive</MenuItem>
                 </Menu>
             </Box>
         </Box>
@@ -115,12 +115,21 @@ export default function KanbanTask(props: KanbanTaskProps) {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
 
     return (<>
-        <Paper sx={{ p: 1 }} onClick={() => setOpenDialog(true)}>
+        <Box
+            sx={{
+                bgcolor: "background.paper",
+                p: 1,
+                border: "1px solid #aaaaaaff",
+                borderRadius: "10px",
+                boxShadow: "0px 0px 15px lightgrey"
+            }}
+            onClick={() => setOpenDialog(true)}
+        >
             <KanbanTaskHeader task={props.task} />
             <Box pt={1}>
                 {props.task.name}
             </Box>
-        </Paper>
+        </Box>
         <KanbanTaskEditDialog openDialog={openDialog} setOpenDialog={setOpenDialog} task={props.task} />
     </>
     );
