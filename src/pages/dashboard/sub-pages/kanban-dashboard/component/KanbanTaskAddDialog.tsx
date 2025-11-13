@@ -29,7 +29,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
     const notificationContext = useContext(NotificationContext);
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [time, setTime] = useState<string>("30");
+    const [time, setTime] = useState<string>("");
     const [taskType, setTaskType] = useState<string>(TaskType.NOT_CLASSIFIED);
     const [taskQuadrant, setTaskQuadrant] = useState<string>(TaskQuadrant.NOT_CLASSIFIED);
 
@@ -49,7 +49,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
     function closeWindow() {
         setName("");
         setDescription("");
-        setTime("30");
+        setTime("");
         setTaskType(TaskType.NOT_CLASSIFIED);
         setTaskQuadrant(TaskQuadrant.NOT_CLASSIFIED);
         setClientId(-1);
