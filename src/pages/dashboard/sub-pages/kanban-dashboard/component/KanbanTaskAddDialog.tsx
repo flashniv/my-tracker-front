@@ -25,6 +25,16 @@ function getProjectsByClient(clients: ClientDTO[], clientId: number): ProjectDTO
     return resProjects;
 }
 
+function sortFunc(a:ProjectDTO, b:ProjectDTO):number {
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+    return 0;
+}
+
 export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
     const notificationContext = useContext(NotificationContext);
     const [name, setName] = useState<string>("");
@@ -137,7 +147,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
                                     label="Project"
                                     onChange={(event) => { setProjectId(event.target.value) }}
                                 >
-                                    {getProjectsByClient(clients, clientId).map((project) =>
+                                    {getProjectsByClient(clients, clientId).sort(sortFunc).map((project) =>
                                         <MenuItem key={project.id} value={project.id}>{project.name}</MenuItem>)
                                     }
                                 </Select>
