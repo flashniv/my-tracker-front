@@ -20,10 +20,10 @@ function AccountingPeriodItem(props: AccountingPeriodItemProps) {
                 <Grid size={3}>
                     {props.AccountingPeriod.open ? <Typography fontWeight="bold">Opened</Typography> : <></>}
                 </Grid>
-                <Grid size={3} sx={{display:"flex",direction:"row"}}>
-                    {props.AccountingPeriod.sent?<Typography>Sent</Typography>:<Button size="small" variant="contained">Send</Button>}
-                    {props.AccountingPeriod.paid?<Typography pl={2}>Paid</Typography>:<Button  size="small" variant="contained" sx={{ml:2}}>Pay</Button>}
-                    {props.AccountingPeriod.open?<Button  size="small" variant="contained" sx={{ml:2}}>Close</Button>:<></>}
+                <Grid size={3} sx={{ display: "flex", direction: "row" }}>
+                    {props.AccountingPeriod.sent ? <Typography>Sent</Typography> : <Button size="small" variant="contained">Send</Button>}
+                    {props.AccountingPeriod.paid ? <Typography pl={2}>Paid</Typography> : <Button size="small" variant="contained" sx={{ ml: 2 }}>Pay</Button>}
+                    {props.AccountingPeriod.open ? <Button size="small" variant="contained" sx={{ ml: 2 }}>Close</Button> : <></>}
                 </Grid>
                 <Grid size={3}>
                     <Typography>Started on: {createdDate.toLocaleString()}</Typography>
@@ -53,11 +53,11 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
         id = parseInt(params.id);
     }
 
-    function sortPeriods(a:AccountingPeriod,b:AccountingPeriod){
-        if(a.createdOn!=null && b.createdOn!=null){
-            const aStartPeriod=new Date(a.createdOn);
-            const bStartPeriod=new Date(b.createdOn);
-            return bStartPeriod.getTime()-aStartPeriod.getTime();
+    function sortPeriods(a: AccountingPeriod, b: AccountingPeriod) {
+        if (a.createdOn != null && b.createdOn != null) {
+            const aStartPeriod = new Date(a.createdOn);
+            const bStartPeriod = new Date(b.createdOn);
+            return bStartPeriod.getTime() - aStartPeriod.getTime();
         }
         return 0;
     }
@@ -87,7 +87,8 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
             });
     }
 
-    useEffect(updateAccountingPeriods);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateAccountingPeriods, []);
 
     return (
         <Box sx={{ pt: 5 }}>

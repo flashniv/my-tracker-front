@@ -17,7 +17,7 @@ function TaskItem(props: TaskItemProps) {
     const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
 
     return (<>
-        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={()=>{setOpenEditDialog(true);}} >
+        <Paper elevation={3} sx={{ p: 2, cursor: "pointer" }} onClick={() => { setOpenEditDialog(true); }} >
             {props.task.name}
         </Paper>
         <TaskEditDialog openDialog={openEditDialog} setOpenDialog={setOpenEditDialog} task={props.task} updateTasks={props.updateTasks} />
@@ -56,7 +56,8 @@ export default function Tasks(props: TasksProps) {
             });
     }
 
-    useEffect(updateTasks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateTasks, []);
 
     return (
         <Box sx={{ pt: 5 }}>

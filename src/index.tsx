@@ -34,13 +34,13 @@ function App() {
                 },
             },
         },
-        palette:{
-            primary:{
-                main:"#126500ff"
+        palette: {
+            primary: {
+                main: "#126500ff"
             },
-            secondary:{
-                main:"#eaffeaff",
-                contrastText:"black"
+            secondary: {
+                main: "#eaffeaff",
+                contrastText: "black"
             }
         }
     });

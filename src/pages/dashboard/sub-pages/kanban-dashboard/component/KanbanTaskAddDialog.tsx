@@ -25,7 +25,7 @@ function getProjectsByClient(clients: ClientDTO[], clientId: number): ProjectDTO
     return resProjects;
 }
 
-function sortFunc(a:ProjectDTO, b:ProjectDTO):number {
+function sortFunc(a: ProjectDTO, b: ProjectDTO): number {
     if (a.name < b.name) {
         return -1;
     }
@@ -108,7 +108,8 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
         setProjectId(-1);
     }
 
-    useEffect(updateClients);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateClients, []);
 
     return (
         <Dialog

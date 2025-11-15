@@ -82,7 +82,8 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
             });
     }
 
-    useEffect(updateTasks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateTasks, []);
 
     function changeFilterTaskType(event: string | null) {
         if (event == null) { return; }

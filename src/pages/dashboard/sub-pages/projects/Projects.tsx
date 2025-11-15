@@ -52,7 +52,8 @@ export default function Projects(props: ProjectsProps) {
             });
     }
 
-    useEffect(updateProjects);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateProjects, []);
 
     return (
         <Box sx={{ pt: 5 }}>

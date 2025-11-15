@@ -14,13 +14,13 @@ interface ClientProps {
 function ClientItem(props: ClientProps) {
     const navigate = useNavigate();
     return (
-        <Paper elevation={3} sx={{display:"flex", justifyContent:"space-between", p: 2, cursor: "pointer" }}>
+        <Paper elevation={3} sx={{ display: "flex", justifyContent: "space-between", p: 2, cursor: "pointer" }}>
             <Box display={"flex"} alignItems={"center"}>
-            {props.client.name}
+                {props.client.name}
             </Box>
             <Box>
                 <Button onClick={() => navigate("/dashboard/project/" + (props.client.id != null ? props.client.id : -1))} variant="contained">Projects</Button>
-                <Button onClick={() => navigate("/dashboard/accounting-period/" + (props.client.id != null ? props.client.id : -1))} variant="contained" sx={{ml:1}}>Accounting periods</Button>
+                <Button onClick={() => navigate("/dashboard/accounting-period/" + (props.client.id != null ? props.client.id : -1))} variant="contained" sx={{ ml: 1 }}>Accounting periods</Button>
             </Box>
         </Paper>
     );
@@ -51,13 +51,14 @@ export default function Clients(props: ClientsProps) {
             });
     }
 
-    useEffect(updateClients);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(updateClients, []);
 
     return (
         <Box sx={{ pt: 5 }}>
             <Container maxWidth="lg">
                 <Stack spacing={2}>
-                    {placeHolder ? <Box display={"flex"} justifyContent={"center"} sx={{pt:5}}>
+                    {placeHolder ? <Box display={"flex"} justifyContent={"center"} sx={{ pt: 5 }}>
                         <CircularProgress color="primary" size="3rem" />
                     </Box>
                         : <>
