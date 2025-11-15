@@ -7,6 +7,9 @@ import API from "../../../../../common/API";
 import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
+import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 interface KanbanTaskHeaderProps {
     task: Task
@@ -27,9 +30,21 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
         event.stopPropagation();
     };
 
-    function changeTaskStatus(event: React.MouseEvent<HTMLLIElement>, taskStatus: TaskStatus) {
-        setAnchorEl(null);
-        event.stopPropagation();
+    function clickPlay() {
+        if (props.task.taskStatus === TaskStatus.NEW) {
+            changeTaskStatus(TaskStatus.IN_PROGRESS);
+        }
+        if (props.task.taskStatus === TaskStatus.IN_PROGRESS) {
+            changeTaskStatus(TaskStatus.DONE);
+        }
+        if (props.task.taskStatus === TaskStatus.DONE) {
+            if (window.confirm("Are you soriusly?")) {
+                changeTaskStatus(TaskStatus.ARCHIVED);
+            }
+        }
+    }
+
+    function changeTaskStatus(taskStatus: TaskStatus) {
         const newTask: Task = {
             id: props.task.id,
             name: props.task.name,
@@ -81,11 +96,25 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
             display={"flex"}
             justifyContent={"space-between"}
         >
-            <Box sx={{ textTransform: "uppercase" }}>
-                {props.task.project?.client?.name} - {props.task.project?.name}
+            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                {props.task.taskQuadrant === TaskQuadrant.URGENT_IMPORTANT ? <PriorityHighIcon color="error" /> : <></>}
+                <Box sx={{ textTransform: "uppercase" }}>
+                    {props.task.project?.client?.name} - {props.task.project?.name}
+                </Box>
             </Box>
-            <Box>
+            <Box display={"flex"} alignItems={"center"}>
                 {getTime(props.task)}
+                <IconButton
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={(event) => { event.stopPropagation(); clickPlay(); }}
+                    sx={{ padding: "1px" }}
+                >
+                    <PlayArrowIcon fontSize="small" />
+                </IconButton>
+
                 <IconButton
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
@@ -107,11 +136,11 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
                         },
                     }}
                 >
-                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.NEW)}>New</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.IN_PROGRESS)}>Progress</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.BLOCKED)}>Block</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.DONE)}>Done</MenuItem>
-                    <MenuItem onClick={(event) => changeTaskStatus(event, TaskStatus.ARCHIVED)}>Archive</MenuItem>
+                    <MenuItem onClick={(event) => { setAnchorEl(null); event.stopPropagation(); changeTaskStatus(TaskStatus.NEW); }}>New</MenuItem>
+                    <MenuItem onClick={(event) => { setAnchorEl(null); event.stopPropagation(); changeTaskStatus(TaskStatus.IN_PROGRESS); }}>Progress</MenuItem>
+                    <MenuItem onClick={(event) => { setAnchorEl(null); event.stopPropagation(); changeTaskStatus(TaskStatus.BLOCKED); }}>Block</MenuItem>
+                    <MenuItem onClick={(event) => { setAnchorEl(null); event.stopPropagation(); changeTaskStatus(TaskStatus.DONE); }}>Done</MenuItem>
+                    <MenuItem onClick={(event) => { setAnchorEl(null); event.stopPropagation(); changeTaskStatus(TaskStatus.ARCHIVED); }}>Archive</MenuItem>
                 </Menu>
             </Box>
         </Box>
@@ -124,11 +153,17 @@ interface KanbanTaskProps {
 
 export default function KanbanTask(props: KanbanTaskProps) {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const bgColor = isFreshTask(props.task) ? "khaki" : "background.paper";
+
+    function isFreshTask(task: Task): boolean {
+        const seconds = (new Date().getTime()) - (new Date(task.createdOn).getTime());
+        return seconds < 7200000;
+    }
 
     return (<>
         <Box
             sx={{
-                bgcolor: "background.paper",
+                bgcolor: bgColor,
                 p: 1,
                 border: "1px solid #aaaaaaff",
                 borderRadius: "10px",
@@ -140,7 +175,7 @@ export default function KanbanTask(props: KanbanTaskProps) {
             <Box pt={1}>
                 {props.task.name}
             </Box>
-        </Box>
+        </Box >
         <KanbanTaskEditDialog openDialog={openDialog} setOpenDialog={setOpenDialog} task={props.task} />
     </>
     );
