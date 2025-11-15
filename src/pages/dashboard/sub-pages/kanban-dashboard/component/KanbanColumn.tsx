@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import KanbanTask from "./KanbanTask";
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import { useContext } from "react";

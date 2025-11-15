@@ -1,7 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import API from "../../../../../common/API";
 import { NotificationContext } from "../../../../../common/NotificationContext";
+import { Client } from "../../../../../type/Client";
 
 interface ClientAddDialogProps {
     openDialog: boolean,

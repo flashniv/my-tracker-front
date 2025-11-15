@@ -39,7 +39,7 @@ export default function Tasks(props: TasksProps) {
 
     props.setTitle("Tasks");
 
-    if (params.id != undefined) {
+    if (params.id !== undefined) {
         id = parseInt(params.id);
     }
 
@@ -56,7 +56,7 @@ export default function Tasks(props: TasksProps) {
             });
     }
 
-    useEffect(updateTasks, []);
+    useEffect(updateTasks);
 
     return (
         <Box sx={{ pt: 5 }}>

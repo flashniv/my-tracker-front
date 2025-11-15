@@ -12,6 +12,7 @@ import { KanbanTasksContext } from "./component/KanbanTaskContext";
 import { TaskType } from "../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../type/TaskQuadrant";
 import ClearIcon from '@mui/icons-material/Clear';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 interface KanbanDashboardProps {
     setTitle: (title: string) => void
@@ -81,13 +82,11 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
             });
     }
 
-    useEffect(() => {
-        updateTasks();
-    }, []);
+    useEffect(updateTasks);
 
     function changeFilterTaskType(event: string | null) {
         if (event == null) { return; }
-        if (event.localeCompare("null") == 0) {
+        if (event.localeCompare("null") === 0) {
             setFilterTaskType("null");
         } else {
             setFilterTaskType(TaskType[event as keyof typeof TaskType]);
@@ -95,7 +94,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
     }
     function changeFilterTaskQuadrant(event: string | null) {
         if (event == null) { return; }
-        if (event.localeCompare("null") == 0) {
+        if (event.localeCompare("null") === 0) {
             setFilterTaskQuadrant("null");
         } else {
             setFilterTaskQuadrant(TaskQuadrant[event as keyof typeof TaskQuadrant]);
@@ -104,14 +103,14 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
 
     function filterTasks(value: Task): boolean {
         let res = true;
-        if (filterTaskType.localeCompare("null") != 0 && value.taskType != filterTaskType) {
+        if (filterTaskType.localeCompare("null") !== 0 && value.taskType !== filterTaskType) {
             res = false;
         }
-        if (filterTaskQuadrant.localeCompare("null") != 0 && value.taskQuadrant != filterTaskQuadrant) {
+        if (filterTaskQuadrant.localeCompare("null") !== 0 && value.taskQuadrant !== filterTaskQuadrant) {
             res = false;
         }
         if (value.project != null && value.project.client != null) {
-            if (filterText.localeCompare("") != 0 && !(value.project?.client?.name + value.project?.name).toLowerCase().includes(filterText.toLowerCase())) {
+            if (filterText.localeCompare("") !== 0 && !(value.project?.client?.name + value.project?.name).toLowerCase().includes(filterText.toLowerCase())) {
                 res = false;
             }
         }
@@ -122,7 +121,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
         <KanbanTasksContext.Provider value={[tasks.filter(filterTasks), updateTasks]}>
             <Box display={"flex"} justifyContent={"space-between"} pt={1} pr={1} pl={2}>
                 <Box display={"flex"} alignItems={"center"}>
-                    <TextField label="Search" variant="standard" value={filterText} onChange={e => setFilterText(e.target.value)} sx={{minWidth:"170px"}} />
+                    <TextField label="Search" variant="standard" value={filterText} onChange={e => setFilterText(e.target.value)} sx={{ minWidth: "170px" }} />
                     <FormControl sx={{ m: 1, minWidth: 170 }} size="small">
                         <InputLabel id="demo-simple-select-standard-label1">Quadrant</InputLabel>
                         <Select
@@ -166,7 +165,12 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                         <ClearIcon />
                     </IconButton>
                 </Box>
-                <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
+                <Box>
+                    <IconButton>
+                        <RefreshIcon />
+                    </IconButton>
+                    <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
+                </Box>
             </Box>
             <Stack
                 minHeight={"4000px"}

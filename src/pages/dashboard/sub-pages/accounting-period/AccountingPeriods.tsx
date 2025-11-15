@@ -49,7 +49,7 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
 
     props.setTitle("AccountingPeriods");
 
-    if (params.id != undefined) {
+    if (params.id !== undefined) {
         id = parseInt(params.id);
     }
 
@@ -87,7 +87,7 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
             });
     }
 
-    useEffect(updateAccountingPeriods, []);
+    useEffect(updateAccountingPeriods);
 
     return (
         <Box sx={{ pt: 5 }}>

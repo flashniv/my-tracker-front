@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
-import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, TextField } from "@mui/material";
+import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import { Task } from "../../../../../type/Task";
@@ -108,9 +108,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
         setProjectId(-1);
     }
 
-    useEffect(() => {
-        updateClients();
-    }, []);
+    useEffect(updateClients);
 
     return (
         <Dialog
@@ -205,7 +203,7 @@ export default function KanbanTaskAddDialog(props: KanbanTaskAddDialogProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeWindow}>Cancel</Button>
-                    <Button autoFocus type="submit" disabled={clientId == -1 || projectId == -1 || name.length == 0}>
+                    <Button autoFocus type="submit" disabled={clientId === -1 || projectId === -1 || name.length === 0}>
                         Save
                     </Button>
                 </DialogActions>

@@ -5,6 +5,7 @@ import API from "../../../../common/API";
 import { NotificationContext } from "../../../../common/NotificationContext";
 import ClientAddDialog from "./component/ClientAddDialog";
 import { useNavigate } from "react-router-dom";
+import { Client } from "../../../../type/Client";
 
 interface ClientProps {
     client: Client
@@ -50,7 +51,7 @@ export default function Clients(props: ClientsProps) {
             });
     }
 
-    useEffect(updateClients, []);
+    useEffect(updateClients);
 
     return (
         <Box sx={{ pt: 5 }}>

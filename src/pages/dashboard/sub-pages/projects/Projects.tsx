@@ -5,6 +5,7 @@ import { NotificationContext } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import ProjectAddDialog from "./component/ProjectAddDialog";
 import API from "../../../../common/API";
+import { Project } from "../../../../type/Project";
 
 interface ProjectItemProps {
     project: Project,
@@ -34,7 +35,7 @@ export default function Projects(props: ProjectsProps) {
 
     props.setTitle("Projects");
 
-    if (params.id != undefined) {
+    if (params.id !== undefined) {
         id = parseInt(params.id);
     }
 
@@ -51,7 +52,7 @@ export default function Projects(props: ProjectsProps) {
             });
     }
 
-    useEffect(updateProjects, []);
+    useEffect(updateProjects);
 
     return (
         <Box sx={{ pt: 5 }}>
