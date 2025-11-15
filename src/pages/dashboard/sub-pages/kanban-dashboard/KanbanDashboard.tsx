@@ -166,8 +166,8 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                         <ClearIcon />
                     </IconButton>
                 </Box>
-                <Box>
-                    <IconButton>
+                <Box display={"flex"} alignItems={"center"}>
+                    <IconButton onClick={updateTasks} sx={{mr:2}}>
                         <RefreshIcon />
                     </IconButton>
                     <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>
