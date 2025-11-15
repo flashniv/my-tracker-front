@@ -20,6 +20,7 @@ function sortFunc(a: Task, b: Task): number {
 
 export default function KanbanColumn(props: KanbanColumnProps) {
     const kanbanTasksContext = useContext(KanbanTasksContext);
+    const tasks = kanbanTasksContext[0].filter((value => value.taskStatus === props.taskStatus));
 
     return (
         <Box
@@ -35,11 +36,11 @@ export default function KanbanColumn(props: KanbanColumnProps) {
             <Box display={"flex"} justifyContent={"flex-end"}>
                 {props.loading ? <CircularProgress sx={{ color: "secondary.contrastText" }} /> : <></>}
                 <Typography variant="h6" gutterBottom textAlign={"center"} p={1} width={"80%"} color={"secondary.contrastText"}>
-                    {props.title}
+                    {props.title} {tasks.length !== 0 ? tasks.length : ""}
                 </Typography>
             </Box>
             <Stack spacing={1}>
-                {kanbanTasksContext[0].filter((value => value.taskStatus === props.taskStatus)).sort(sortFunc).map(task => <KanbanTask key={task.id} task={task} />)}
+                {tasks.sort(sortFunc).map(task => <KanbanTask key={task.id} task={task} />)}
             </Stack>
         </Box>
     );
