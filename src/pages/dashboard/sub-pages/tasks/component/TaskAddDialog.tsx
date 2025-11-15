@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
 import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
@@ -53,9 +53,20 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
             .then(() => {
                 props.updateTasks();
                 closeWindow();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 props.updateTasks();
                 closeWindow();
             });

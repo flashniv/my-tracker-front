@@ -1,7 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useContext, useState } from "react";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
+import { Client } from "../../../../../type/Client";
+import { Project } from "../../../../../type/Project";
 
 interface ProjectAddDialogProps {
     openDialog: boolean,
@@ -26,9 +28,20 @@ export default function ProjectAddDialog(props: ProjectAddDialogProps) {
                 props.updateProjects();
                 setName("");
                 props.setOpenDialog(false);
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
             });
     }
 

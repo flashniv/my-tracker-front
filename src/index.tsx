@@ -20,7 +20,7 @@ function App() {
                 setLoggedIn(true);
             })
             .catch(error => {
-                //console.error(error);
+                console.error(error);
             });
     }, []);
 

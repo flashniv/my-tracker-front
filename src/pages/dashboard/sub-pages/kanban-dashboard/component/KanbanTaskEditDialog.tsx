@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
 import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
@@ -48,9 +48,20 @@ export default function KanbanTaskEditDialog(props: KanbanTaskEditDialogProps) {
             .then(() => {
                 kanbanTasksContext[1]();
                 closeWindow();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 kanbanTasksContext[1]();
                 closeWindow();
             });

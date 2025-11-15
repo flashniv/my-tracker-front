@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import AppToolBar from './component/AppToolBar';
 import SideBar from './component/SideBar';
-import { Alert, Box, Button, Container, Stack } from '@mui/material';
+import { Alert, Box, Button, Container, Snackbar, SnackbarCloseReason, Stack } from '@mui/material';
 import Clients from './sub-pages/clients/Clients';
-import { NotificationContext } from '../../common/NotificationContext';
+import { NotificationContext, NotificationContextMessage } from '../../common/NotificationContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Projects from './sub-pages/projects/Projects';
 import Tasks from './sub-pages/tasks/Tasks';
@@ -11,13 +11,13 @@ import AccountingPeriods from './sub-pages/accounting-period/AccountingPeriods';
 import KanbanDashboard from './sub-pages/kanban-dashboard/KanbanDashboard';
 
 function DashboardPage() {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     return (
-        <Container maxWidth="sm" sx={{pt:4}}>
+        <Container maxWidth="sm" sx={{ pt: 4 }}>
             <Stack spacing={2}>
-                <Button variant="text" onClick={()=>{navigate("/dashboard/client")}}>Clients</Button>
-                <Button variant="text" onClick={()=>{navigate("/dashboard/kanban-dashboard")}}>Kanban Dashboard</Button>
+                <Button variant="text" onClick={() => { navigate("/dashboard/client") }}>Clients</Button>
+                <Button variant="text" onClick={() => { navigate("/dashboard/kanban-dashboard") }}>Kanban Dashboard</Button>
             </Stack>
         </Container>
     );
@@ -27,10 +27,20 @@ export default function Dashboard() {
     const [openSideBar, setOpenSideBar] = useState(false);
     const [title, setTitle] = useState("Dashboard");
     const location = useLocation();
-    const [alert, setAlert] = useState(<></>);
+    const [alert, setAlert] = useState<NotificationContextMessage>({ message: "", severity: "success", duration: 1000 });
+    const [openAlert, setOpenAlert] = useState(false);
 
-    function showAlert(alertMessage: string) {
-        setAlert(<Alert severity='error' sx={{ position: "absolute", top: "80px", left: "15px", width: "400px" }} >{alertMessage}</Alert>)
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenAlert(false);
+    };
+
+    function showAlert(alertMessage: NotificationContextMessage) {
+        setAlert(alertMessage);
+        setOpenAlert(true);
     }
 
     return (
@@ -45,7 +55,17 @@ export default function Dashboard() {
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
             </Box>
-            {alert}
+            <Snackbar open={openAlert} autoHideDuration={alert.duration} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity={alert.severity}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {alert.message}
+                </Alert>
+            </Snackbar>
+
         </NotificationContext.Provider>
     );
 }

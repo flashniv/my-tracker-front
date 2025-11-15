@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { NotificationContext } from "../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import API from "../../../../common/API";
 import { AccountingPeriod } from "../../../../type/AccountingPeriod";
@@ -67,9 +67,20 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
             API.postContent<void, string>("/client/" + id + "/createAccountingPeriods")
                 .then((persistAccountingPeriods) => {
                     updateAccountingPeriods();
+                    const alertMessage: NotificationContextMessage = {
+                        message: "Done!",
+                        severity: "success",
+                        duration: 700
+                    }
+                    notificationContext(alertMessage);
                 })
                 .catch((error) => {
-                    notificationContext(error.message);
+                    const alertMessage: NotificationContextMessage = {
+                        message: error.message,
+                        severity: "error",
+                        duration: 5000
+                    }
+                    notificationContext(alertMessage);
                 });
         }
     }
@@ -82,7 +93,12 @@ export default function AccountingPeriods(props: AccountingPeriodsProps) {
                 setPlaceHolder(false);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 setPlaceHolder(false);
             });
     }

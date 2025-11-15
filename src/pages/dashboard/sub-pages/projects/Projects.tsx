@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Container, Paper, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { NotificationContext } from "../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import ProjectAddDialog from "./component/ProjectAddDialog";
 import API from "../../../../common/API";
@@ -47,7 +47,12 @@ export default function Projects(props: ProjectsProps) {
                 setPlaceHolder(false);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 setPlaceHolder(false);
             });
     }

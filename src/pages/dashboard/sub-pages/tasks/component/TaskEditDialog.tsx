@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
 import { Box, Button, ButtonGroup, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material";
 import { TaskType } from "../../../../../type/TaskType";
@@ -40,9 +40,20 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
         API.postContent<null, string>("/task/" + props.task.id + "/addTimeRecord?time=" + (parseInt(time) * 60), null)
             .then(data => {
                 props.updateTasks();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch(error => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 props.updateTasks();
             })
     }
@@ -50,9 +61,20 @@ function TaskEditDialogTimeRecords(props: TaskEditDialogTimeRecordsProps) {
         API.postContent<null, string>("/task/" + props.task.id + "/removeTimeRecord/" + id, null)
             .then(data => {
                 props.updateTasks();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch(error => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 props.updateTasks();
             })
     }
@@ -136,9 +158,20 @@ export default function TaskEditDialog(props: TaskEditDialogProps) {
             .then(() => {
                 props.updateTasks();
                 closeWindow();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 props.updateTasks();
                 closeWindow();
             });

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import API from "../../../../common/API";
 import { ClientDTO } from "../../../../type/DTO/ClientDTO";
-import { NotificationContext } from "../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../common/NotificationContext";
 import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import KanbanColumn from "./component/KanbanColumn";
 import { Task } from "../../../../type/Task";
@@ -13,6 +13,8 @@ import { TaskType } from "../../../../type/TaskType";
 import { TaskQuadrant } from "../../../../type/TaskQuadrant";
 import ClearIcon from '@mui/icons-material/Clear';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { Client } from "../../../../type/Client";
+import { Project } from "../../../../type/Project";
 
 interface KanbanDashboardProps {
     setTitle: (title: string) => void
@@ -77,7 +79,12 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                 setPlaceHolder(false);
             })
             .catch(error => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 setPlaceHolder(false);
             });
     }
@@ -167,7 +174,7 @@ export default function KanbanDashboard(props: KanbanDashboardProps) {
                     </IconButton>
                 </Box>
                 <Box display={"flex"} alignItems={"center"}>
-                    <IconButton onClick={updateTasks} sx={{mr:2}}>
+                    <IconButton onClick={updateTasks} sx={{ mr: 2 }}>
                         <RefreshIcon />
                     </IconButton>
                     <Button variant="contained" onClick={() => setOpenAddDialog(true)}>Add</Button>

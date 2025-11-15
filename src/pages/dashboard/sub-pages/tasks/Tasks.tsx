@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Container, Paper, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { NotificationContext } from "../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../common/NotificationContext";
 import AddIcon from '@mui/icons-material/Add';
 import API from "../../../../common/API";
 import TaskAddDialog from "./component/TaskAddDialog";
@@ -51,7 +51,12 @@ export default function Tasks(props: TasksProps) {
                 setPlaceHolder(false);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 setPlaceHolder(false);
             });
     }

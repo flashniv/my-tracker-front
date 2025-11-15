@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Container, Paper, Stack } from "@mui/mat
 import AddIcon from '@mui/icons-material/Add';
 import { useContext, useEffect, useState } from "react";
 import API from "../../../../common/API";
-import { NotificationContext } from "../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../common/NotificationContext";
 import ClientAddDialog from "./component/ClientAddDialog";
 import { useNavigate } from "react-router-dom";
 import { Client } from "../../../../type/Client";
@@ -46,7 +46,12 @@ export default function Clients(props: ClientsProps) {
                 setPlaceHolder(false);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 setPlaceHolder(false);
             });
     }

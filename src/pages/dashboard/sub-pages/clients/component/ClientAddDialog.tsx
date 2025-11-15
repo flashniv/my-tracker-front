@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import API from "../../../../../common/API";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import { Client } from "../../../../../type/Client";
 
 interface ClientAddDialogProps {
@@ -25,9 +25,20 @@ export default function ClientAddDialog(props: ClientAddDialogProps) {
                 props.updateClients();
                 setName("");
                 props.setOpenDialog(false);
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
             });
     }
 

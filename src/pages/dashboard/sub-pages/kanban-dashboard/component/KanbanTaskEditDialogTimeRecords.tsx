@@ -1,5 +1,5 @@
 import { Fragment, useContext, useState } from "react";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import API from "../../../../../common/API";
 import { Box, Button, ButtonGroup, Grid, IconButton, TextField, Typography } from "@mui/material";
 import { Task } from "../../../../../type/Task";
@@ -8,11 +8,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { KanbanTasksContext } from "./KanbanTaskContext";
 
 const cellStyle = {
-    p:1,
+    p: 1,
     display: "flex",
     alignItems: "center",
     borderBottom: "1px solid lightgray"
-} 
+}
 
 function getTime(task: Task): number {
     let time = 0;
@@ -46,9 +46,20 @@ export function KanbanTaskEditDialogTimeRecords(props: KanbanTaskEditDialogTimeR
         API.postContent<null, string>("/task/" + props.task.id + "/addTimeRecord?time=" + (parseInt(time) * 60), null)
             .then(data => {
                 kanbanTasksContext[1]();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch(error => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 kanbanTasksContext[1]();
             })
     }
@@ -56,15 +67,26 @@ export function KanbanTaskEditDialogTimeRecords(props: KanbanTaskEditDialogTimeR
         API.postContent<null, string>("/task/" + props.task.id + "/removeTimeRecord/" + id, null)
             .then(data => {
                 kanbanTasksContext[1]();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch(error => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 kanbanTasksContext[1]();
             })
     }
 
     return (<>
-        <Box sx={{display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
             <ButtonGroup variant="outlined" aria-label="Basic button group">
                 <Button onClick={() => setTime("20")}>20</Button>
                 <Button onClick={() => setTime("30")}>30</Button>
@@ -81,7 +103,7 @@ export function KanbanTaskEditDialogTimeRecords(props: KanbanTaskEditDialogTimeR
         </Box>
 
         <Grid container
-            sx={{ border: "solid lightgrey 1px",mt:1 }}
+            sx={{ border: "solid lightgrey 1px", mt: 1 }}
         >
             {props.task.timeRecords?.filter(value => value.accountingPeriod.open).map(timeRecord =>
                 <Fragment key={timeRecord.id}>

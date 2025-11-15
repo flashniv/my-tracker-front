@@ -4,7 +4,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useContext, useState } from "react";
 import { TaskStatus } from "../../../../../type/TaskStatus";
 import API from "../../../../../common/API";
-import { NotificationContext } from "../../../../../common/NotificationContext";
+import { NotificationContext, NotificationContextMessage } from "../../../../../common/NotificationContext";
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
 
@@ -44,9 +44,20 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
         API.putContent<Task, string>("/task", newTask)
             .then(() => {
                 kanbanTasksContext[1]();
+                const alertMessage: NotificationContextMessage = {
+                    message: "Done!",
+                    severity: "success",
+                    duration: 700
+                }
+                notificationContext(alertMessage);
             })
             .catch((error) => {
-                notificationContext(error.message);
+                const alertMessage: NotificationContextMessage = {
+                    message: error.message,
+                    severity: "error",
+                    duration: 5000
+                }
+                notificationContext(alertMessage);
                 kanbanTasksContext[1]();
             });
 
