@@ -54,6 +54,7 @@ function App() {
                         <Route path="/login" element={<LogIn />} />
                         <Route path="/dashboard/client" element={<Dashboard />} />
                         <Route path="/dashboard/kanban-dashboard" element={<Dashboard />} />
+                        <Route path="/dashboard/report/month-report" element={<Dashboard />} />
                         <Route path="/dashboard/project">
                             <Route path=":id" element={<Dashboard />} />
                         </Route>

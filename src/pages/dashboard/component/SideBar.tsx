@@ -1,4 +1,4 @@
-import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { JSX } from "react";
 import { useNavigate } from "react-router-dom";
@@ -32,10 +32,14 @@ export default function SideBar(props: SideBarProps) {
 
     return (
         <Drawer open={props.openSideBar} onClose={() => props.setOpenSideBar(false)}>
-            <List sx={{minWidth:"250px"}}>
+            <List sx={{ minWidth: "250px" }}>
                 <SideBarItem text="Dashboard" icon={<InboxIcon />} onClick={() => { navigate("/dashboard"); props.setOpenSideBar(false); }} />
                 <SideBarItem text="Kanban dashboard" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/kanban-dashboard"); props.setOpenSideBar(false); }} />
                 <SideBarItem text="Client" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/client"); props.setOpenSideBar(false); }} />
+            </List>
+            <Divider />
+            <List>
+                <SideBarItem text="Month task report" icon={<InboxIcon />} onClick={() => { navigate("/dashboard/report/month-report"); props.setOpenSideBar(false); }} />
             </List>
         </Drawer>
     );

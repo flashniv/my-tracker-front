@@ -10,6 +10,7 @@ import Tasks from './sub-pages/tasks/Tasks';
 import AccountingPeriods from './sub-pages/accounting-period/AccountingPeriods';
 import KanbanDashboard from './sub-pages/kanban-dashboard/KanbanDashboard';
 import StatisticDashboard from './sub-pages/statistic-dasboard/StatisticDashboard';
+import MonthReport from './sub-pages/report/month-report/MonthReport';
 
 export default function Dashboard() {
     const [openSideBar, setOpenSideBar] = useState(false);
@@ -39,6 +40,7 @@ export default function Dashboard() {
                 {location.pathname === '/dashboard' ? <StatisticDashboard /> : <></>}
                 {location.pathname === '/dashboard/client' ? <Clients setTitle={setTitle} /> : <></>}
                 {location.pathname === '/dashboard/kanban-dashboard' ? <KanbanDashboard setTitle={setTitle} /> : <></>}
+                {location.pathname === '/dashboard/report/month-report' ? <MonthReport setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/accounting-period') ? <AccountingPeriods setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/project') ? <Projects setTitle={setTitle} /> : <></>}
                 {location.pathname.startsWith('/dashboard/task') ? <Tasks setTitle={setTitle} /> : <></>}
