@@ -47,7 +47,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <LoginContext value={{ loggedIn, setLoggedIn }}>
+            <LoginContext value={{ isLoggedIn: loggedIn, setLoggedIn }}>
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Site />} />

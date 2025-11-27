@@ -36,7 +36,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
   const userLoggedIn = React.useContext(LoginContext);
-  console.log(userLoggedIn);
   const navigate = useNavigate();
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -87,7 +86,7 @@ export default function AppAppBar() {
             }}
           >
             {userLoggedIn != null ? <>
-              {!userLoggedIn.loggedIn ? <>
+              {!userLoggedIn.isLoggedIn ? <>
                 <Button
                   color="primary"
                   variant="text"

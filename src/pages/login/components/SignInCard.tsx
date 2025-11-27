@@ -69,7 +69,7 @@ export default function SignInCard() {
                 setEmailErrorMessage('');
                 setPasswordError(false);
                 setPasswordErrorMessage('');
-                userLoggedIn?.setLoggedIn(true);
+                userLoggedIn.setLoggedIn(true);
                 navigate("/dashboard");
             })
             .catch(error => {

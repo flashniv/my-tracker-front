@@ -5,6 +5,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box } from '@mui/material';
+import { useContext } from 'react';
+import { LoginContext } from '../../../common/LoginContext';
+import API from '../../../common/API';
+import { useNavigate } from 'react-router-dom';
 
 interface AppToolBarProps {
     clickOpenSideBar: () => void,
@@ -12,6 +16,9 @@ interface AppToolBarProps {
 }
 
 export default function AppToolBar(props: AppToolBarProps) {
+    const loginContext = useContext(LoginContext);
+    const navigate = useNavigate();
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -29,7 +36,12 @@ export default function AppToolBar(props: AppToolBarProps) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         {props.title}
                     </Typography>
-                    <Button color="inherit">Logout</Button>
+                    {loginContext.isLoggedIn ?
+                        <Button color="inherit" onClick={() => { API.logout(); loginContext.setLoggedIn(false); navigate("/login"); }} >
+                            Logout
+                        </Button>
+                        : <Button color="inherit" onClick={(e) => { navigate("/login"); }}>Login</Button>
+                    }
                 </Toolbar>
             </AppBar>
         </Box>
