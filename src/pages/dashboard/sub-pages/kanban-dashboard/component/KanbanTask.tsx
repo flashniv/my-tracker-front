@@ -10,6 +10,8 @@ import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
 import { TaskQuadrant } from "../../../../../type/TaskQuadrant";
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import LabelImportantOutlineIcon from '@mui/icons-material/LabelImportantOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 interface KanbanTaskHeaderProps {
     task: Task
@@ -97,7 +99,10 @@ function KanbanTaskHeader(props: KanbanTaskHeaderProps) {
             justifyContent={"space-between"}
         >
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
-                {props.task.taskQuadrant === TaskQuadrant.URGENT_IMPORTANT ? <PriorityHighIcon color="error" /> : <></>}
+                {props.task.taskQuadrant === TaskQuadrant.URGENT_IMPORTANT ? <PriorityHighIcon color="error" fontSize="small"/> : <></>}
+                {props.task.taskQuadrant === TaskQuadrant.URGENT_NO_IMPORTANT ? <PriorityHighIcon color="info" fontSize="small"/> : <></>}
+                {props.task.taskQuadrant === TaskQuadrant.NO_URGENT_IMPORTANT ? <LabelImportantOutlineIcon color="info" fontSize="small"/> : <></>}
+                {props.task.taskQuadrant === TaskQuadrant.NO_URGENT_NO_IMPORTANT ? <DeleteOutlineIcon color="action" fontSize="small"/> : <></>}
                 <Box sx={{ textTransform: "uppercase" }}>
                     {props.task.project?.client?.name} - {props.task.project?.name}
                 </Box>
