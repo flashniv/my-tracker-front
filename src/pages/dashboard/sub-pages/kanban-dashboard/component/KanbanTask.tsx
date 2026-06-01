@@ -12,15 +12,16 @@ import { NotificationContext, NotificationContextMessage } from "../../../../../
 import { KanbanTasksContext } from "./KanbanTaskContext";
 import KanbanTaskEditDialog from "./KanbanTaskEditDialog";
 
-type PaletteColor = "error" | "info" | "warning" | "grey";
-
-// Eisenhower quadrant -> accent colour + short action label
-const quadrantMeta: Record<TaskQuadrant, { color: PaletteColor; label: string }> = {
-    [TaskQuadrant.URGENT_IMPORTANT]: { color: "error", label: "Do" },
-    [TaskQuadrant.NO_URGENT_IMPORTANT]: { color: "info", label: "Plan" },
-    [TaskQuadrant.URGENT_NO_IMPORTANT]: { color: "warning", label: "Delegate" },
-    [TaskQuadrant.NO_URGENT_NO_IMPORTANT]: { color: "grey", label: "Drop" },
-    [TaskQuadrant.NOT_CLASSIFIED]: { color: "grey", label: "" },
+// Eisenhower quadrant -> accent palette token + short action label.
+// Use sx tokens (resolved by the theme) instead of Chip `color` props: the
+// custom theme only styles default/success/error chips, so color="info"/"warning"
+// would fall back to MUI's machinery and crash on this palette.
+const quadrantMeta: Record<TaskQuadrant, { token: string; label: string }> = {
+    [TaskQuadrant.URGENT_IMPORTANT]: { token: "error.main", label: "Do" },
+    [TaskQuadrant.NO_URGENT_IMPORTANT]: { token: "info.main", label: "Plan" },
+    [TaskQuadrant.URGENT_NO_IMPORTANT]: { token: "warning.main", label: "Delegate" },
+    [TaskQuadrant.NO_URGENT_NO_IMPORTANT]: { token: "text.secondary", label: "Drop" },
+    [TaskQuadrant.NOT_CLASSIFIED]: { token: "text.secondary", label: "" },
 };
 
 // Task type -> compact size badge
@@ -34,8 +35,8 @@ const typeMeta: Record<TaskType, string> = {
 };
 
 function accentColor(quadrant: TaskQuadrant): string {
-    const c = quadrantMeta[quadrant].color;
-    return c === "grey" ? "divider" : `${c}.main`;
+    const token = quadrantMeta[quadrant].token;
+    return token === "text.secondary" ? "divider" : token;
 }
 
 function getOpenTime(task: Task): number {
@@ -221,9 +222,15 @@ export default function KanbanTask(props: KanbanTaskProps) {
                     <Chip
                         size="small"
                         label={quadrant.label}
-                        color={quadrant.color === "grey" ? "default" : quadrant.color}
-                        variant={quadrant.color === "grey" ? "outlined" : "filled"}
-                        sx={{ height: 20, fontSize: "0.68rem" }}
+                        variant="outlined"
+                        sx={{
+                            height: 20,
+                            fontSize: "0.68rem",
+                            bgcolor: "transparent",
+                            borderColor: quadrant.token,
+                            color: quadrant.token,
+                            "& .MuiChip-label": { color: quadrant.token },
+                        }}
                     />
                 )}
                 {typeLabel && (
@@ -231,7 +238,14 @@ export default function KanbanTask(props: KanbanTaskProps) {
                         size="small"
                         label={typeLabel}
                         variant="outlined"
-                        sx={{ height: 20, fontSize: "0.68rem" }}
+                        sx={{
+                            height: 20,
+                            fontSize: "0.68rem",
+                            bgcolor: "transparent",
+                            borderColor: "divider",
+                            color: "text.secondary",
+                            "& .MuiChip-label": { color: "text.secondary" },
+                        }}
                     />
                 )}
                 {fresh && (
